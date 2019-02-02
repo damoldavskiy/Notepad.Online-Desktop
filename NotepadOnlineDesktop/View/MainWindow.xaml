@@ -1,0 +1,42 @@
+﻿<Window x:Class="NotepadOnlineDesktop.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:NotepadOnlineDesktop"
+        mc:Ignorable="d"
+        Title="{Binding WindowTitle}" Height="450" Width="800">
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" Padding="2" Background="#3C4D60" Foreground="White">
+            <MenuItem Header="File" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="New" Command="New" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <MenuItem Header="Open" Command="Open" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <Separator Background="#91A3B7"/>
+                <MenuItem Header="Save" Command="Save" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <MenuItem Header="Save as" Command="SaveAs" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <Separator Background="#91A3B7"/>
+                <MenuItem Header="Exit" Command="Close" Template="{DynamicResource SubMenuItemTemplate}"/>
+            </MenuItem>
+            <MenuItem Header="Edit" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="Undo" Command="Undo" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <MenuItem Header="Redo" Command="Redo" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <Separator Background="#91A3B7"/>
+                <MenuItem Header="Cut" Command="Cut" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <MenuItem Header="Copy" Command="Copy" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <MenuItem Header="Paste" Command="Paste" Template="{DynamicResource SubMenuItemTemplate}"/>
+                <Separator Background="#91A3B7"/>
+                <MenuItem Header="Find" Command="Find" Template="{DynamicResource SubMenuItemTemplate}"/>
+            </MenuItem>
+            <MenuItem Header="View" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="Text wrapping" IsCheckable="True" IsChecked="{Binding TextWrap}" Template="{DynamicResource SubMenuItemTemplate}"/>
+            </MenuItem>
+            <MenuItem x:Name="extensions" Header="Extensions" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="Manager" Command="{Binding OpenManager}" Template="{DynamicResource SubMenuItemTemplate}"/>
+            </MenuItem>
+            <MenuItem Header="Help" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="About" Command="{Binding OpenAbout}"/>
+            </MenuItem>
+        </Menu>
+        <TextBox x:Name="text" AcceptsReturn="True" TextWrapping="{Binding WrappingType}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+    </DockPanel>
+</Window>
