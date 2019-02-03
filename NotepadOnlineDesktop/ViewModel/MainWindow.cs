@@ -129,7 +129,18 @@ namespace NotepadOnlineDesktop.ViewModel
             }
         }
 
-        public Model.ActionCommand OpenManager
+        public Model.ActionCommand Settings
+        {
+            get
+            {
+                return new Model.ActionCommand(sender =>
+                {
+                    new View.SettingsWindow().ShowDialog();
+                });
+            }
+        }
+
+        public Model.ActionCommand Manager
         {
             get
             {
@@ -140,7 +151,7 @@ namespace NotepadOnlineDesktop.ViewModel
             }
         }
 
-        public Model.ActionCommand OpenAbout
+        public Model.ActionCommand About
         {
             get
             {

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CloudExtension"
         mc:Ignorable="d"
-        Title="Cloud DataBase Properties" Height="380" Width="400">
+        Title="Cloud DataBase Properties" Height="380" Width="400"
+        ResizeMode="NoResize">
     <StackPanel>
         <GroupBox Header="Account" Margin="20,20,20,0" Padding="10">
             <StackPanel>

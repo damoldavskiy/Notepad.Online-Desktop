@@ -8,5 +8,8 @@
     <Setting Name="extStatus" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="theme" Type="System.String" Scope="User">
+      <Value Profile="(Default)">light</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
