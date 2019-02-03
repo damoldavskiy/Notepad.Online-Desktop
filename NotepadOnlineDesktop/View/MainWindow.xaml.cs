@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace NotepadOnlineDesktop.View
 {
@@ -6,6 +7,8 @@ namespace NotepadOnlineDesktop.View
     {
         public MainWindow()
         {
+            Model.ThemeManager.Update();
+
             InitializeComponent();
 
             var viewModel = new ViewModel.MainWindow(text, extensions);

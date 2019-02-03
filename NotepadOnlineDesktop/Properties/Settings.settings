@@ -11,5 +11,8 @@
     <Setting Name="theme" Type="System.String" Scope="User">
       <Value Profile="(Default)">light</Value>
     </Setting>
+    <Setting Name="askonexit" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -68,6 +68,7 @@
     <Compile Include="Model\ManagedExtension.cs" />
     <Compile Include="Model\SettingsPageItem.cs" />
     <Compile Include="Model\SettingsPropertyItem.cs" />
+    <Compile Include="Model\ThemeManager.cs" />
     <Compile Include="ViewModel\FindWindow.cs" />
     <Compile Include="ViewModel\ManagerWindow.cs" />
     <Compile Include="ViewModel\SettingsWindow.cs" />
@@ -80,6 +81,18 @@
     <Compile Include="View\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Themes\Common.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Dark.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Light.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\FindWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

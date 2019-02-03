@@ -12,6 +12,7 @@ namespace NotepadOnlineDesktop.ViewModel
     public class SettingsWindow : INotifyPropertyChanged
     {
         List<Model.SettingsPropertyItem> properties;
+        Model.SettingsPageItem selectedPage;
 
         Properties.Settings settings
         {
@@ -43,6 +44,13 @@ namespace NotepadOnlineDesktop.ViewModel
                         settings.theme = "dark";
                 };
 
+                var askSaveCheckBox = new CheckBox()
+                {
+                    IsChecked = settings.askonexit
+                };
+                askSaveCheckBox.Checked += (s, e) => settings.askonexit = true;
+                askSaveCheckBox.Unchecked += (s, e) => settings.askonexit = false;
+
                 return new List<Model.SettingsPageItem>
                 {
                     new Model.SettingsPageItem()
@@ -54,6 +62,11 @@ namespace NotepadOnlineDesktop.ViewModel
                             {
                                 Header = "Color theme",
                                 Control = colorThemeComboBox
+                            },
+                            new Model.SettingsPropertyItem()
+                            {
+                                Header = "Ask on exit",
+                                Control = askSaveCheckBox
                             }
                         }
                     }
@@ -74,8 +87,19 @@ namespace NotepadOnlineDesktop.ViewModel
             }
         }
 
-        public Model.SettingsPageItem SelectedPage { get; set; }
-        
+        public Model.SettingsPageItem SelectedPage
+        {
+            get
+            {
+                return selectedPage;
+            }
+            set
+            {
+                selectedPage = value;
+                OnPropertyChanged("SelectedPage");
+            }
+        }
+
         public Model.ActionCommand PagesSelectionChanged
         {
             get
@@ -94,6 +118,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 return new Model.ActionCommand(sender =>
                 {
                     settings.Save();
+                    Model.ThemeManager.Update();
                 });
             }
         }
@@ -101,6 +126,7 @@ namespace NotepadOnlineDesktop.ViewModel
         public void Closed(object sender, EventArgs e)
         {
             settings.Reload();
+            Model.ThemeManager.Update();
         }
 
         void OnPropertyChanged(string name)

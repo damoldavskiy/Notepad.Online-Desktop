@@ -1,0 +1,13 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:NotepadOnlineDesktop.Themes">
+
+    <SolidColorBrush x:Key="MainTextBox.Background" Color="#4B6077"/>
+    <SolidColorBrush x:Key="MainTextBox.Foreground" Color="White"/>
+    <SolidColorBrush x:Key="MainTextBox.Caret" Color="White"/>
+    <SolidColorBrush x:Key="MainTextBox.Selection" Color="#FF26A0DA"/>
+    <SolidColorBrush x:Key="MainTextBox.Static.Border" Color="#4B6077"/>
+    <SolidColorBrush x:Key="MainTextBox.MouseOver.Border" Color="#4B6077"/>
+    <SolidColorBrush x:Key="MainTextBox.Focus.Border" Color="#4B6077"/>
+
+</ResourceDictionary>

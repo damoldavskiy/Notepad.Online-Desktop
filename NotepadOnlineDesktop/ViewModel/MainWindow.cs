@@ -204,7 +204,8 @@ namespace NotepadOnlineDesktop.ViewModel
 
         public void Closing(object sender, CancelEventArgs e)
         {
-            e.Cancel = !AskBeforeClear();
+            if (Properties.Settings.Default.askonexit)
+                e.Cancel = !AskBeforeClear();
         }
 
         private void Text_TextChanged(object sender, TextChangedEventArgs e)

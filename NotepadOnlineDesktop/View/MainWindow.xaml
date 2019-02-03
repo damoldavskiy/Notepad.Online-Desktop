@@ -38,6 +38,6 @@
                 <MenuItem Header="About" Command="{Binding About}"/>
             </MenuItem>
         </Menu>
-        <TextBox x:Name="text" AcceptsReturn="True" TextWrapping="{Binding WrappingType}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+        <TextBox x:Name="text" AcceptsReturn="True" TextWrapping="{Binding WrappingType}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Style="{DynamicResource MainTextBox}"/>
     </DockPanel>
 </Window>
