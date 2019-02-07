@@ -32,8 +32,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="NotepadOnlineDataBase">
-      <HintPath>..\..\NotepadOnlineDataBase\NotepadOnlineDataBase\bin\Debug\NotepadOnlineDataBase.dll</HintPath>
+    <Reference Include="DataBase">
+      <HintPath>..\..\NotepadOnlineConnection\DataBase\bin\Debug\DataBase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
@@ -56,7 +56,14 @@
     <Compile Include="PropertiesWindow.xaml.cs">
       <DependentUpon>PropertiesWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RegistrationWindow.xaml.cs">
+      <DependentUpon>RegistrationWindow.xaml</DependentUpon>
+    </Compile>
     <Page Include="PropertiesWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="RegistrationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

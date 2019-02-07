@@ -9,7 +9,11 @@ namespace CloudExtension
         public PropertiesWindow()
         {
             InitializeComponent();
+            Initialize();
+        }
 
+        private void Initialize()
+        {
             var properties = Properties.Settings.Default;
             login.Text = properties.login;
             password.Password = properties.password;
@@ -39,6 +43,14 @@ namespace CloudExtension
             authorize.IsEnabled = false;
 
             MessageBox.Show("Authorizing successful", "Success");
+        }
+
+        private void Register_Click(object sender, RoutedEventArgs e)
+        {
+            new RegistrationWindow().ShowDialog();
+            Properties.Settings.Default.login = DataBase.Manager.Login;
+            Properties.Settings.Default.password = DataBase.Manager.Password;
+            Initialize();
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)

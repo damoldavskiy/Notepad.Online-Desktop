@@ -19,7 +19,10 @@
                     <Label Margin="0,5,5,5">Password</Label>
                     <PasswordBox x:Name="password" Margin="0,5,5,5" PasswordChanged="Auth_Changed"/>
                 </DockPanel>
-                <Button x:Name="authorize" Click="Authorize_Click" Margin="5" Height="25" Width="100">Authorize</Button>
+                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Click="Register_Click" Margin="5,5,5,0" Height="25" Width="100">Register</Button>
+                    <Button x:Name="authorize" Click="Authorize_Click" Margin="5,5,5,0" Height="25" Width="100" >Authorize</Button>
+                </StackPanel>
             </StackPanel>
         </GroupBox>
         <GroupBox Header="Local settings" Margin="20" Padding="10">
