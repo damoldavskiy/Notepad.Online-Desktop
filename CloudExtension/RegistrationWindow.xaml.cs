@@ -41,7 +41,6 @@ namespace CloudExtension
             }
 
             MessageBox.Show("You'll receive confirmation code in 1-3 minutes. Type one in the box below", "Success");
-            confirm.IsEnabled = true;
         }
 
         private void Confirm_Click(object sender, RoutedEventArgs e)

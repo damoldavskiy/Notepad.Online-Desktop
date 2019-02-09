@@ -18,8 +18,7 @@ namespace CloudExtension
             login.Text = properties.login;
             password.Password = properties.password;
             path.Text = properties.path;
-
-            authorize.IsEnabled = false;
+            
             accept.IsEnabled = false;
         }
 
@@ -40,7 +39,6 @@ namespace CloudExtension
             properties.password = DataBase.Manager.Password;
             properties.token = DataBase.Manager.Token;
             properties.Save();
-            authorize.IsEnabled = false;
 
             MessageBox.Show("Authorizing successful", "Success");
         }
@@ -66,12 +64,6 @@ namespace CloudExtension
             properties.token = dir;
             properties.Save();
             accept.IsEnabled = false;
-        }
-
-        private void Auth_Changed(object sender, RoutedEventArgs e)
-        {
-            if (login.Text.Length > 0 && password.Password.Length > 0)
-                authorize.IsEnabled = true;
         }
 
         private void Local_Changed(object sender, RoutedEventArgs e)

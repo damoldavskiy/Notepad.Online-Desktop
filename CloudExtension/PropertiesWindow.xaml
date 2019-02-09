@@ -6,24 +6,31 @@
         xmlns:local="clr-namespace:CloudExtension"
         mc:Ignorable="d"
         Title="Cloud DataBase Properties" Height="380" Width="400"
-        ResizeMode="NoResize">
+        ResizeMode="CanMinimize">
     <StackPanel>
         <GroupBox Header="Account" Margin="20,20,20,0" Padding="10">
-            <StackPanel>
-                <Label>Authorization</Label>
-                <DockPanel>
-                    <Label Margin="0,5,5,5">Login</Label>
-                    <TextBox x:Name="login" Margin="0,5,5,5" TextChanged="Auth_Changed"/>
-                </DockPanel>
-                <DockPanel>
-                    <Label Margin="0,5,5,5">Password</Label>
-                    <PasswordBox x:Name="password" Margin="0,5,5,5" PasswordChanged="Auth_Changed"/>
-                </DockPanel>
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.ColumnSpan="2">Authorization</Label>
+                <Label Margin="5" Grid.Row="1">Login</Label>
+                <TextBox x:Name="login" Margin="5" Grid.Row="1" Grid.Column="1"/>
+                <Label Margin="5" Grid.Row="2">Password</Label>
+                <PasswordBox x:Name="password" Margin="5" Grid.Row="2" Grid.Column="1"/>
+                <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Click="Authorize_Click" Margin="5,5,5,0" Height="25" Width="100" >Authorize</Button>
                     <Button Click="Register_Click" Margin="5,5,5,0" Height="25" Width="100">Register</Button>
-                    <Button x:Name="authorize" Click="Authorize_Click" Margin="5,5,5,0" Height="25" Width="100" >Authorize</Button>
                 </StackPanel>
-            </StackPanel>
+            </Grid>
         </GroupBox>
         <GroupBox Header="Local settings" Margin="20" Padding="10">
             <StackPanel>

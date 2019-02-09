@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CloudExtension"
         mc:Ignorable="d"
-        Title="RegistrationWindow" Height="230" Width="300">
+        Title="RegistrationWindow" Height="240" Width="350"
+        ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="110"/>
@@ -30,6 +31,6 @@
 
         <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4">Confirm code</TextBlock>
         <TextBox x:Name="code" Margin="5" Grid.Row="4"  Grid.Column="1"/>
-        <Button x:Name="confirm" Margin="5" Grid.Row="5" Grid.Column="1" Width="100" HorizontalAlignment="Right" Click="Confirm_Click" IsEnabled="False">Confirm</Button>
+        <Button Margin="5" Grid.Row="5" Grid.Column="1" Width="100" HorizontalAlignment="Right" Click="Confirm_Click">Confirm</Button>
     </Grid>
 </Window>

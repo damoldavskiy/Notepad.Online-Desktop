@@ -194,7 +194,7 @@ namespace NotepadOnlineDesktop.ViewModel
 
             try
             {
-                Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
+                Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
                 //Model.ExtensionManager.Load(@"Extensions\");
                 Model.ExtensionManager.Initialize(instance, extensionsParent);
             }

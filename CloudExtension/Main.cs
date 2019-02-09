@@ -64,6 +64,9 @@ namespace CloudExtension
             }
             cloudPath = properties.path;
 
+            if (properties.login.Length == 0 || properties.password.Length == 0)
+                return;
+
             var authResult = await DataBase.Manager.AuthorizeAsync(properties.login, properties.password, properties.token);
             if (authResult != DataBase.ReturnCode.Success)
             {
@@ -137,7 +140,7 @@ namespace CloudExtension
                 MessageBox.Show("Authorize firstly", "File not saved");
                 return;
             }
-
+            
             var result = DataBase.Manager.GetNames();
 
             if (result.Item1 != DataBase.ReturnCode.Success)
