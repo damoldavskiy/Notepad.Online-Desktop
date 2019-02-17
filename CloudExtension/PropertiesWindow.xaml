@@ -21,13 +21,13 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.ColumnSpan="2">Authorization</Label>
-                <Label Margin="5" Grid.Row="1">Login</Label>
-                <TextBox x:Name="login" Margin="5" Grid.Row="1" Grid.Column="1"/>
+                <Label Grid.ColumnSpan="2">Login</Label>
+                <Label Margin="5" Grid.Row="1">E-mail</Label>
+                <TextBox x:Name="email" Margin="5" Grid.Row="1" Grid.Column="1"/>
                 <Label Margin="5" Grid.Row="2">Password</Label>
                 <PasswordBox x:Name="password" Margin="5" Grid.Row="2" Grid.Column="1"/>
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Click="Authorize_Click" Margin="5,5,5,0" Height="25" Width="100" >Authorize</Button>
+                    <Button Click="Login_Click" Margin="5,5,5,0" Height="25" Width="100" >Log in</Button>
                     <Button Click="Register_Click" Margin="5,5,5,0" Height="25" Width="100">Register</Button>
                 </StackPanel>
             </Grid>

@@ -7,24 +7,24 @@
         mc:Ignorable="d"
         Title="{Binding WindowTitle}" Height="450" Width="800">
     <DockPanel>
-        <Menu DockPanel.Dock="Top" Padding="2" Background="#3C4D60" Foreground="White">
+        <Menu DockPanel.Dock="Top" Padding="2" Background="#283593" Foreground="White">
             <MenuItem Header="File" Template="{DynamicResource MenuItemTemplate}">
                 <MenuItem Header="New" Command="New"/>
                 <MenuItem Header="Open" Command="Open"/>
-                <Separator Background="#91A3B7"/>
+                <Separator Background="#5F5FC4"/>
                 <MenuItem Header="Save" Command="Save"/>
                 <MenuItem Header="Save as" Command="SaveAs"/>
-                <Separator Background="#91A3B7"/>
+                <Separator Background="#5F5FC4"/>
                 <MenuItem Header="Exit" Command="Close"/>
             </MenuItem>
             <MenuItem Header="Edit" Template="{DynamicResource MenuItemTemplate}">
                 <MenuItem Header="Undo" Command="Undo"/>
                 <MenuItem Header="Redo" Command="Redo"/>
-                <Separator Background="#91A3B7"/>
+                <Separator Background="#5F5FC4"/>
                 <MenuItem Header="Cut" Command="Cut"/>
                 <MenuItem Header="Copy" Command="Copy"/>
                 <MenuItem Header="Paste" Command="Paste"/>
-                <Separator Background="#91A3B7"/>
+                <Separator Background="#5F5FC4"/>
                 <MenuItem Header="Find" Command="Find"/>
             </MenuItem>
             <MenuItem Header="View" Template="{DynamicResource MenuItemTemplate}">

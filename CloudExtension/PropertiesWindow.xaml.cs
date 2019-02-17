@@ -1,6 +1,5 @@
 ﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace CloudExtension
 {
@@ -15,19 +14,19 @@ namespace CloudExtension
         private void Initialize()
         {
             var properties = Properties.Settings.Default;
-            login.Text = properties.login;
+            email.Text = properties.email;
             password.Password = properties.password;
             path.Text = properties.path;
             
             accept.IsEnabled = false;
         }
 
-        private void Authorize_Click(object sender, RoutedEventArgs e)
+        private async void Login_Click(object sender, RoutedEventArgs e)
         {
-            var log = login.Text.Trim();
+            var log = email.Text.Trim();
             var pass = password.Password.Trim();
 
-            var result = DataBase.Manager.Authorize(log, pass);
+            var result = await DataBase.Manager.LoginAsync(log, pass);
             if (result != DataBase.ReturnCode.Success)
             {
                 MessageBox.Show("Error occured while authorizing: " + result, "Not authorized");
@@ -35,18 +34,18 @@ namespace CloudExtension
             }
 
             var properties = Properties.Settings.Default;
-            properties.login = DataBase.Manager.Login;
+            properties.email = DataBase.Manager.Email;
             properties.password = DataBase.Manager.Password;
             properties.token = DataBase.Manager.Token;
             properties.Save();
 
-            MessageBox.Show("Authorizing successful", "Success");
+            MessageBox.Show("You are signed in", "Success");
         }
 
         private void Register_Click(object sender, RoutedEventArgs e)
         {
             new RegistrationWindow().ShowDialog();
-            Properties.Settings.Default.login = DataBase.Manager.Login;
+            Properties.Settings.Default.email = DataBase.Manager.Email;
             Properties.Settings.Default.password = DataBase.Manager.Password;
             Initialize();
         }

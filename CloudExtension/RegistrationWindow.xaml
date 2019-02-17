@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CloudExtension"
         mc:Ignorable="d"
-        Title="RegistrationWindow" Height="240" Width="350"
+        Title="New account" Height="240" Width="350"
         ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,13 +21,13 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0">Login</TextBlock>
-        <TextBox x:Name="login" Margin="5" Grid.Row="0" Grid.Column="1"/>
+        <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="0">E-mail</TextBlock>
+        <TextBox x:Name="email" Margin="5" Grid.Row="0" Grid.Column="1"/>
         <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="1">Password</TextBlock>
         <PasswordBox x:Name="password" Margin="5" Grid.Row="1" Grid.Column="1"/>
         <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="2">Confirm password</TextBlock>
         <PasswordBox x:Name="conf_password" Margin="5" Grid.Row="2" Grid.Column="1"/>
-        <Button Margin="5" Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Click="Register_Click">Register</Button>
+        <Button Margin="5" Grid.Row="3" Grid.Column="1" Width="100" HorizontalAlignment="Right" Click="Register_Click">Sign up</Button>
 
         <TextBlock VerticalAlignment="Center" Margin="5" Grid.Row="4">Confirm code</TextBlock>
         <TextBox x:Name="code" Margin="5" Grid.Row="4"  Grid.Column="1"/>

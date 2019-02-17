@@ -1,22 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace CloudExtension
 {
-    /// <summary>
-    /// Логика взаимодействия для RegistrationWindow.xaml
-    /// </summary>
     public partial class RegistrationWindow : Window
     {
         public RegistrationWindow()
@@ -32,7 +17,7 @@ namespace CloudExtension
                 return;
             }
 
-            var result = DataBase.Manager.Register(login.Text, password.Password);
+            var result = DataBase.Manager.Register(email.Text, password.Password);
 
             if (result != DataBase.ReturnCode.Success)
             {
@@ -45,7 +30,13 @@ namespace CloudExtension
 
         private void Confirm_Click(object sender, RoutedEventArgs e)
         {
-            var result = DataBase.Manager.Confirm(code.Text);
+            if (DataBase.Manager.Status != DataBase.ManagerStatus.RegistrationConfirmation)
+            {
+                MessageBox.Show("Perform registration firstly");
+                return;
+            }
+
+            var result = DataBase.Manager.ConfirmRegistration(code.Text);
 
             if (result != DataBase.ReturnCode.Success)
             {

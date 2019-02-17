@@ -1,9 +1,11 @@
-﻿using NotepadOnlineDesktopExtensions;
+﻿using CloudExtension.Properties;
+
+using NotepadOnlineDesktopExtensions;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -38,7 +40,6 @@ namespace CloudExtension
         MenuItem update;
         MenuItem properties;
         IApplicationInstance app;
-        string cloudPath;
 
         public Main()
         {
@@ -46,7 +47,7 @@ namespace CloudExtension
             saveInCloud.Click += SaveInCloud_Click;
             openFolder = new MenuItem() { Header = "Open cloud folder" };
             openFolder.Click += OpenFolder_Click;
-            update = new MenuItem() { Header = "Update" };
+            update = new MenuItem() { Header = "Update files" };
             update.Click += Update_Click;
             properties = new MenuItem() { Header = "Properties" };
             properties.Click += Properties_Click;
@@ -55,89 +56,68 @@ namespace CloudExtension
         public async Task OnStart(IApplicationInstance instance)
         {
             app = instance;
-            var properties = Properties.Settings.Default;
 
-            if (!Directory.Exists(properties.path))
+            if (!Directory.Exists(Settings.Default.path))
             {
-                properties.path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\NotepadOnline\";
-                Directory.CreateDirectory(properties.path);
+                Settings.Default.path = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + @"\NotepadOnline\";
+                Directory.CreateDirectory(Settings.Default.path);
             }
-            cloudPath = properties.path;
 
-            if (properties.login.Length == 0 || properties.password.Length == 0)
+            if (Settings.Default.email.Length == 0)
                 return;
 
-            var authResult = await DataBase.Manager.AuthorizeAsync(properties.login, properties.password, properties.token);
-            if (authResult != DataBase.ReturnCode.Success)
+            var result = await DataBase.Manager.LoginAsync(Settings.Default.email, Settings.Default.password, Settings.Default.token);
+            if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show("Message: " + authResult, "Cloud Extension: not authorized");
+                MessageBox.Show("Log in failed: " + result, "Cloud Extension");
                 return;
             }
 
-            foreach (var file in new DirectoryInfo(cloudPath).GetFiles())
-                file.Delete();
-
-            var names = DataBase.Manager.GetNames().Item2;
-            foreach (var name in names)
-                using (var stream = new StreamWriter(cloudPath + name, false, Encoding.Default))
-                {
-                    stream.Write(DataBase.Manager.GetData(name).Item3);
-                }
+            await UpdateFolderAsync();
         }
 
         public async Task OnStop()
-        {
-        }
+        { }
 
-        private void SaveInCloud_Click(object sender, RoutedEventArgs e)
+        private async void SaveInCloud_Click(object sender, RoutedEventArgs e)
         {
-            if (app.Name == null)
+            if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
-                MessageBox.Show("Save the file to disk firstly", "File not saved");
-                return;
-            }
-            if (!DataBase.Manager.Authorized)
-            {
-                MessageBox.Show("Authorize firstly", "File not saved");
+                MessageBox.Show("Sign in firstly", "File not saved");
                 return;
             }
 
-            var name = app.Name.Substring(app.Name.LastIndexOf("\\") + 1);
+            string name;
 
-            using (var stream = new StreamWriter(cloudPath + name, false, Encoding.Default))
+            if (app.Name != null)
             {
-                stream.Write(app.Text);
-            }
-            
-            var result = DataBase.Manager.AddData(name, "Cloud Extension", app.Text);
-
-            if (result == DataBase.ReturnCode.Success)
-                MessageBox.Show("The file now in the cloud: " + name, "Saving successful");
-            else if (result == DataBase.ReturnCode.DataAlreadyExists)
-            {
-                if (MessageBox.Show($"Do you want to replace file \"{name}\"?", "Replacing file", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-                {
-                    var res = DataBase.Manager.EditDescription(name, "Cloud Extension");
-                    DataBase.Manager.EditText(name, app.Text);
-
-                    if (res != DataBase.ReturnCode.Success)
-                        MessageBox.Show($"Error: {res}", "Saving failed");
-                }
+                name = app.Name.Substring(app.Name.LastIndexOf("\\") + 1);
+                name = name.Substring(0, name.LastIndexOf('.'));
             }
             else
-                MessageBox.Show($"Error: {result}", "Saving failed");
+            {
+                var input = new InputNameWindow();
+                input.ShowDialog();
+                if (!input.Canceled)
+                    name = input.Text;
+                else
+                    return;
+            }
+            
+            await SaveToFolderAsync(name, app.Text);
+            await SaveToCloudAsync(name, app.Text);
         }
 
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
-            app.OpenFolder(cloudPath);
+            app.OpenFolder(Settings.Default.path);
         }
 
-        private void Update_Click(object sender, RoutedEventArgs e)
+        private async void Update_Click(object sender, RoutedEventArgs e)
         {
-            if (!DataBase.Manager.Authorized)
+            if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
-                MessageBox.Show("Authorize firstly", "File not saved");
+                MessageBox.Show("Sign in firstly", "Updating failed");
                 return;
             }
             
@@ -146,14 +126,7 @@ namespace CloudExtension
             if (result.Item1 != DataBase.ReturnCode.Success)
                 MessageBox.Show($"Error: {result.Item1}", "Updating failed");
 
-            foreach (var file in new DirectoryInfo(cloudPath).GetFiles())
-                file.Delete();
-
-            foreach (var name in result.Item2)
-                using (var stream = new StreamWriter(cloudPath + name, false, Encoding.Default))
-                {
-                    stream.Write(DataBase.Manager.GetData(name).Item3);
-                }
+            await UpdateFolderAsync();
 
             MessageBox.Show("All files are now updated", "Updating successful");
         }
@@ -161,6 +134,51 @@ namespace CloudExtension
         private void Properties_Click(object sender, RoutedEventArgs e)
         {
             new PropertiesWindow().ShowDialog();
+        }
+
+        private async Task UpdateFolderAsync()
+        {
+            ClearFolder();
+
+            var names = (await DataBase.Manager.GetNamesAsync()).Item2;
+            foreach (var name in names)
+                await SaveToFolderAsync(name, (await DataBase.Manager.GetDataAsync(name)).Item3);
+        }
+
+        private async Task SaveToFolderAsync(string name, string text)
+        {
+            using (var stream = new StreamWriter(Settings.Default.path + name + ".txt", false, Encoding.Default))
+            {
+                await stream.WriteAsync(text);
+            }
+        }
+
+        private async Task SaveToCloudAsync(string name, string text)
+        {
+            var result = await DataBase.Manager.AddDataAsync(name, "Desktop Extension", app.Text);
+
+            if (result == DataBase.ReturnCode.Success)
+                MessageBox.Show("The file now in the cloud: " + name, "Saving successful");
+            else if (result == DataBase.ReturnCode.DataAlreadyExists)
+            {
+                if (MessageBox.Show($"Do you want to replace file \"{name}\"?", "Replacing file", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    result = await DataBase.Manager.EditDescriptionAsync(name, "Desktop Extension");
+                    if (result == DataBase.ReturnCode.Success)
+                        result = await DataBase.Manager.EditTextAsync(name, app.Text);
+
+                    if (result != DataBase.ReturnCode.Success)
+                        MessageBox.Show($"Error: {result}", "Saving failed");
+                }
+            }
+            else
+                MessageBox.Show($"Error: {result}", "Saving failed");
+        }
+
+        private void ClearFolder()
+        {
+            foreach (var file in new DirectoryInfo(Settings.Default.path).GetFiles())
+                file.Delete();
         }
     }
 }

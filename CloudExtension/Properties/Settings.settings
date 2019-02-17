@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CloudExtension.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="login" Type="System.String" Scope="User">
+    <Setting Name="email" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
     <Setting Name="password" Type="System.String" Scope="User">
