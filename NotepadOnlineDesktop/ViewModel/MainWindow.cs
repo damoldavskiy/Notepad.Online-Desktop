@@ -1,6 +1,6 @@
-﻿using NotepadOnlineDesktopExtensions;
+﻿using Microsoft.Win32;
 
-using Microsoft.Win32;
+using NotepadOnlineDesktopExtensions;
 
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,6 @@ using System.IO;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 
 namespace NotepadOnlineDesktop.ViewModel
@@ -52,7 +51,6 @@ namespace NotepadOnlineDesktop.ViewModel
 
         string name;
         bool saved = true;
-        bool textWrap;
         TextBox text;
 
         string Name
@@ -93,11 +91,12 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             get
             {
-                return textWrap;
+                return Properties.Settings.Default.textwrap;
             }
             set
             {
-                textWrap = value;
+                Properties.Settings.Default.textwrap = value;
+                Properties.Settings.Default.Save();
                 OnPropertyChanged("TextWrap");
                 OnPropertyChanged("WrappingType");
             }
@@ -107,7 +106,7 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             get
             {
-                return textWrap ? TextWrapping.Wrap : TextWrapping.NoWrap;
+                return Properties.Settings.Default.textwrap ? TextWrapping.Wrap : TextWrapping.NoWrap;
             }
         }
 
@@ -167,6 +166,8 @@ namespace NotepadOnlineDesktop.ViewModel
             this.text = text;
             text.TextChanged += Text_TextChanged;
 
+            TextWrap = Properties.Settings.Default.textwrap;
+
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
                 try
@@ -177,29 +178,34 @@ namespace NotepadOnlineDesktop.ViewModel
                 {
                     MessageBox.Show("Unable to load file: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-            
-            var instance = new Instance();
-            instance.GetName = () => name;
-            instance.GetText = () => text.Text;
-            instance.OpenFile = name => Open(name);
-            instance.OpenDirectory = path =>
-            {
-                if (AskBeforeClear())
-                {
-                    var name = GetNameToOpen(path);
-                    if (name != null)
-                        Open(name);
-                }
-            };
 
-            try
+            if (Properties.Settings.Default.enableExtensions)
             {
-                Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
-                //Model.ExtensionManager.Load(@"Extensions\");
-                Model.ExtensionManager.Initialize(instance, extensionsParent);
+                var instance = new Instance();
+                instance.GetName = () => name;
+                instance.GetText = () => text.Text;
+                instance.OpenFile = name => Open(name);
+                instance.OpenDirectory = path =>
+                {
+                    if (AskBeforeClear())
+                    {
+                        var name = GetNameToOpen(path);
+                        if (name != null)
+                            Open(name);
+                    }
+                };
+
+                try
+                {
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
+                    //Model.ExtensionManager.Load(@"Extensions\");
+                    Model.ExtensionManager.Initialize(instance, extensionsParent);
+                }
+                catch (DirectoryNotFoundException)
+                { }
             }
-            catch (DirectoryNotFoundException)
-            { }
+            else
+                extensionsParent.Visibility = Visibility.Collapsed;
         }
 
         public void Closing(object sender, CancelEventArgs e)

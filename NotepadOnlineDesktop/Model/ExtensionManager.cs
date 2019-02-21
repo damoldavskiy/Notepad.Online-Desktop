@@ -15,7 +15,7 @@ namespace NotepadOnlineDesktop.Model
         public static MenuItem ParentMenu { get; private set; }
 
         [ImportMany]
-        private static List<IExtension> loadedExtensions { get; set; }
+        public static List<IExtension> LoadedExtensions { get; private set; }
 
         public static void Load(string path)
         {
@@ -23,7 +23,7 @@ namespace NotepadOnlineDesktop.Model
             catalog.Catalogs.Add(new DirectoryCatalog(path));
 
             var container = new CompositionContainer(catalog);
-            loadedExtensions = new List<IExtension>(container.GetExportedValues<IExtension>());
+            LoadedExtensions = new List<IExtension>(container.GetExportedValues<IExtension>());
         }
 
         public static void Initialize(IApplicationInstance instance, MenuItem parent)
@@ -31,7 +31,7 @@ namespace NotepadOnlineDesktop.Model
             ParentMenu = parent;
 
             Extensions = new ObservableCollection<ManagedExtension>();
-            foreach (var extension in loadedExtensions)
+            foreach (var extension in LoadedExtensions)
             {
                 var menu = new MenuItem
                 {

@@ -4,7 +4,4 @@
              xmlns:local="clr-namespace:NotepadOnlineDesktop"
              StartupUri="View/MainWindow.xaml"
              DispatcherUnhandledException="Application_DispatcherUnhandledException">
-    <Application.Resources>
-
-    </Application.Resources>
 </Application>

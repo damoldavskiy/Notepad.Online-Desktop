@@ -68,5 +68,29 @@ namespace NotepadOnlineDesktop.Properties {
                 this["askonexit"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool textwrap {
+            get {
+                return ((bool)(this["textwrap"]));
+            }
+            set {
+                this["textwrap"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool enableExtensions {
+            get {
+                return ((bool)(this["enableExtensions"]));
+            }
+            set {
+                this["enableExtensions"] = value;
+            }
+        }
     }
 }

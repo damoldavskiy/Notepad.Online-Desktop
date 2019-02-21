@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:NotepadOnlineDesktop.View"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="SettingsWindow" Height="250" Width="600"
+        Title="Settings" Height="250" Width="600"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
