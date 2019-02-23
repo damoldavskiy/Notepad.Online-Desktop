@@ -1,10 +1,11 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
 namespace NotepadOnlineDesktop.View
 {
     public partial class MainWindow : Window
     {
+        public static MainWindow Instance;
+
         public MainWindow()
         {
             Model.ThemeManager.Update();
@@ -17,6 +18,8 @@ namespace NotepadOnlineDesktop.View
             Closing += viewModel.Closing;
             CommandBindings.AddRange(viewModel.Bindings);
             DataContext = viewModel;
+
+            Instance = this;
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -123,7 +124,8 @@ namespace NotepadOnlineDesktop.ViewModel
                     new CommandBinding(ApplicationCommands.Save, Save_Executed, Save_CanExecute),
                     new CommandBinding(ApplicationCommands.SaveAs, SaveAs_Executed),
                     new CommandBinding(ApplicationCommands.Close, Exit_Executed),
-                    new CommandBinding(ApplicationCommands.Find, Find_Executed)
+                    new CommandBinding(ApplicationCommands.Find, Find_Executed),
+                    new CommandBinding(ApplicationCommands.Replace, Replace_Executed)
                 };
             }
         }
@@ -264,11 +266,12 @@ namespace NotepadOnlineDesktop.ViewModel
         void Find_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var findWindow = new View.FindWindow();
+            findWindow.Owner = View.MainWindow.Instance;
             findWindow.ViewModel.RequestFind += (s, args) =>
             {
                 int index;
                 var comp = args.IgnoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture;
-
+                
                 if (args.DownDirection)
                     index = text.Text.IndexOf(args.Word, text.CaretIndex + text.SelectionLength, comp);
                 else
@@ -277,6 +280,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 if (index == -1)
                 {
                     MessageBox.Show("No matches", "Completed", MessageBoxButton.OK, MessageBoxImage.Information);
+                    text.Focus();
                     return;
                 }
 
@@ -285,6 +289,20 @@ namespace NotepadOnlineDesktop.ViewModel
                 text.Focus();
             };
             findWindow.Show();
+        }
+
+        private void Replace_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var replaceWindow = new View.ReplaceWindow();
+            replaceWindow.Owner = View.MainWindow.Instance;
+            replaceWindow.ViewModel.RequestReplace += (s, args) =>
+            {
+                var comp = args.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
+
+                text.Text = Regex.Replace(text.Text, args.OldWord, args.NewWord, comp);
+                text.Focus();
+            };
+            replaceWindow.Show();
         }
 
         bool AskBeforeClear()

@@ -64,14 +64,19 @@
     </ApplicationDefinition>
     <Compile Include="Model\ActionCommand.cs" />
     <Compile Include="Model\ExtensionStatus.cs" />
+    <Compile Include="Model\ReplaceEventArgs.cs" />
     <Compile Include="Model\FindEventArgs.cs" />
     <Compile Include="Model\ManagedExtension.cs" />
     <Compile Include="Model\SettingsPageItem.cs" />
     <Compile Include="Model\SettingsPropertyItem.cs" />
     <Compile Include="Model\ThemeManager.cs" />
+    <Compile Include="ViewModel\ReplaceWindow.cs" />
     <Compile Include="ViewModel\FindWindow.cs" />
     <Compile Include="ViewModel\ManagerWindow.cs" />
     <Compile Include="ViewModel\SettingsWindow.cs" />
+    <Compile Include="View\ReplaceWindow.xaml.cs">
+      <DependentUpon>ReplaceWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\FindWindow.xaml.cs">
       <DependentUpon>FindWindow.xaml</DependentUpon>
     </Compile>
@@ -92,6 +97,10 @@
     <Page Include="Themes\Light.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ReplaceWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\FindWindow.xaml">
       <SubType>Designer</SubType>
