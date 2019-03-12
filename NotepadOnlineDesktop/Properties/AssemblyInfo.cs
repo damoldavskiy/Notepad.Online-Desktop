@@ -7,12 +7,12 @@ using System.Windows;
 // Общие сведения об этой сборке предоставляются следующим набором
 // набора атрибутов. Измените значения этих атрибутов, чтобы изменить сведения,
 // связанные со сборкой.
-[assembly: AssemblyTitle("NotepadOnlineDesktop")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Notepad.Online Desktop")]
+[assembly: AssemblyDescription("Application makes it easy to edit and operate with text files cross-platform")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("NotepadOnlineDesktop")]
-[assembly: AssemblyCopyright("Copyright ©  2018")]
+[assembly: AssemblyCompany("DM Soft")]
+[assembly: AssemblyProduct("Notepad.Online Desktop")]
+[assembly: AssemblyCopyright("Copyright © 2019 DM Soft")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -158,7 +158,7 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 return new Model.ActionCommand(sender =>
                 {
-                    MessageBox.Show("Notepad.Online Desktop\nVersion: Alpha\n\nHave a question? Contact with developer: party_50@mail.ru", "About", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Notepad.Online Desktop\nVersion: 1.0\n\nHave a question? Contact with developer: party_50@mail.ru", "About", MessageBoxButton.OK, MessageBoxImage.Information);
                 });
             }
         }
@@ -199,8 +199,8 @@ namespace NotepadOnlineDesktop.ViewModel
 
                 try
                 {
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
-                    //Model.ExtensionManager.Load(@"Extensions\");
+                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
+                    Model.ExtensionManager.Load(@"Extensions\");
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
                 catch (DirectoryNotFoundException)
