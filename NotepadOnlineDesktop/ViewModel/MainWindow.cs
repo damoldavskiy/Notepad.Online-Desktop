@@ -6,11 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace NotepadOnlineDesktop.ViewModel
 {
@@ -23,6 +25,10 @@ namespace NotepadOnlineDesktop.ViewModel
                 get
                 {
                     return GetText();
+                }
+                set
+                {
+                    SetText(value);
                 }
             }
 
@@ -45,6 +51,7 @@ namespace NotepadOnlineDesktop.ViewModel
             }
 
             public Func<string> GetText;
+            public Action<string> SetText;
             public Func<string> GetName;
             public Action<string> OpenFile;
             public Action<string> OpenDirectory;
@@ -165,7 +172,12 @@ namespace NotepadOnlineDesktop.ViewModel
 
         public MainWindow(TextBox text, MenuItem extensionsParent)
         {
+            if (Properties.Settings.Default.fontFamily is null)
+                Properties.Settings.Default.fontFamily = Fonts.SystemFontFamilies.Where(font => font.ToString() == "Consolas").First();
+
             this.text = text;
+            text.FontFamily = Properties.Settings.Default.fontFamily;
+            text.FontSize = Properties.Settings.Default.fontSize;
             text.TextChanged += Text_TextChanged;
 
             TextWrap = Properties.Settings.Default.textwrap;
@@ -186,6 +198,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 var instance = new Instance();
                 instance.GetName = () => name;
                 instance.GetText = () => text.Text;
+                instance.SetText = value => text.Text = value;
                 instance.OpenFile = name => Open(name);
                 instance.OpenDirectory = path =>
                 {
@@ -199,8 +212,8 @@ namespace NotepadOnlineDesktop.ViewModel
 
                 try
                 {
-                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
-                    Model.ExtensionManager.Load(@"Extensions\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
+                    //Model.ExtensionManager.Load(@"Extensions\");
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
                 catch (DirectoryNotFoundException)
@@ -347,22 +360,16 @@ namespace NotepadOnlineDesktop.ViewModel
 
         void Open(string name)
         {
-            using (var stream = new StreamReader(name, Encoding.Default))
-            {
-                text.Text = stream.ReadToEnd();
-                Name = name;
-                Saved = true;
-            }
+            text.Text = File.ReadAllText(name, Encoding.UTF8);
+            Name = name;
+            Saved = true;
         }
 
         void Save(string name)
         {
-            using (var stream = new StreamWriter(name, false, Encoding.Default))
-            {
-                stream.Write(text.Text);
-                Name = name;
-                Saved = true;
-            }
+            File.WriteAllText(name, text.Text, Encoding.UTF8);
+            Name = name;
+            Saved = true;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

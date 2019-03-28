@@ -92,5 +92,28 @@ namespace NotepadOnlineDesktop.Properties {
                 this["enableExtensions"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int fontSize {
+            get {
+                return ((int)(this["fontSize"]));
+            }
+            set {
+                this["fontSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Windows.Media.FontFamily fontFamily {
+            get {
+                return ((global::System.Windows.Media.FontFamily)(this["fontFamily"]));
+            }
+            set {
+                this["fontFamily"] = value;
+            }
+        }
     }
 }

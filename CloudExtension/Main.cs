@@ -27,17 +27,19 @@ namespace CloudExtension
             {
                 return new List<MenuItem>()
                 {
-                    saveInCloud,
                     openFolder,
                     update,
+                    saveInCloud,
+                    delete,
                     properties
                 };
             }
         }
 
-        MenuItem saveInCloud;
         MenuItem openFolder;
         MenuItem update;
+        MenuItem saveInCloud;
+        MenuItem delete;
         MenuItem properties;
         IApplicationInstance app;
 
@@ -45,6 +47,8 @@ namespace CloudExtension
         {
             saveInCloud = new MenuItem() { Header = "Save in cloud" };
             saveInCloud.Click += SaveInCloud_Click;
+            delete = new MenuItem() { Header = "Delete file" };
+            delete.Click += Delete_Click;
             openFolder = new MenuItem() { Header = "Open cloud folder" };
             openFolder.Click += OpenFolder_Click;
             update = new MenuItem() { Header = "Update files" };
@@ -79,7 +83,7 @@ namespace CloudExtension
         public async Task OnStop()
         { }
 
-        private async void SaveInCloud_Click(object sender, RoutedEventArgs e)
+        async void SaveInCloud_Click(object sender, RoutedEventArgs e)
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
@@ -104,16 +108,35 @@ namespace CloudExtension
                     return;
             }
             
-            await SaveToFolderAsync(name, app.Text);
+            SaveToFolder(name, app.Text);
             await SaveToCloudAsync(name, app.Text);
         }
 
-        private void OpenFolder_Click(object sender, RoutedEventArgs e)
+        void Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (app.Name == null || !app.Name.StartsWith(Settings.Default.path) || !app.Name.EndsWith(".txt"))
+            {
+                MessageBox.Show("Open file from Cloud folder to operate", "Illegal file");
+                return;
+            }
+            var name = app.Name.Substring(Settings.Default.path.Length);
+            name = name.Substring(0, name.Length - 4);
+            var result = DataBase.Manager.DelData(name);
+            if (result != DataBase.ReturnCode.Success)
+            {
+                MessageBox.Show($"Error: {result}", "Deleting failed");
+                return;
+            }
+            File.Delete(app.Name);
+            MessageBox.Show("File deleted", "Success");
+        }
+
+        void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
             app.OpenFolder(Settings.Default.path);
         }
 
-        private async void Update_Click(object sender, RoutedEventArgs e)
+        async void Update_Click(object sender, RoutedEventArgs e)
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
@@ -131,29 +154,26 @@ namespace CloudExtension
             MessageBox.Show("All files are now updated", "Updating successful");
         }
 
-        private void Properties_Click(object sender, RoutedEventArgs e)
+        void Properties_Click(object sender, RoutedEventArgs e)
         {
             new PropertiesWindow().ShowDialog();
         }
 
-        private async Task UpdateFolderAsync()
+        async Task UpdateFolderAsync()
         {
             ClearFolder();
 
             var names = (await DataBase.Manager.GetNamesAsync()).Item2;
             foreach (var name in names)
-                await SaveToFolderAsync(name, (await DataBase.Manager.GetDataAsync(name)).Item3);
+                SaveToFolder(name, (await DataBase.Manager.GetDataAsync(name)).Item3);
         }
 
-        private async Task SaveToFolderAsync(string name, string text)
+        void SaveToFolder(string name, string text)
         {
-            using (var stream = new StreamWriter(Settings.Default.path + name + ".txt", false, Encoding.Default))
-            {
-                await stream.WriteAsync(text);
-            }
+            File.WriteAllText(Settings.Default.path + name + ".txt", text, Encoding.UTF8);
         }
 
-        private async Task SaveToCloudAsync(string name, string text)
+        async Task SaveToCloudAsync(string name, string text)
         {
             var result = await DataBase.Manager.AddDataAsync(name, "Desktop Extension", app.Text);
 

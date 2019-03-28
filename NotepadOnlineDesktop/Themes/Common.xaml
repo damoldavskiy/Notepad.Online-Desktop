@@ -89,7 +89,7 @@
                             <Setter Property="BorderBrush" TargetName="templateRoot" Value="#FF26A0DA"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#91A3B7"/>
+                            <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="#FFD6D6D6"/>
                             <Setter Property="Fill" TargetName="Glyph" Value="#FF707070"/>
                         </Trigger>
                         <MultiTrigger>

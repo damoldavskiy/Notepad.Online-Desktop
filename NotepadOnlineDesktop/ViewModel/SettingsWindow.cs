@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Media;
 
 namespace NotepadOnlineDesktop.ViewModel
 {
@@ -11,6 +12,7 @@ namespace NotepadOnlineDesktop.ViewModel
         List<Model.SettingsPageItem> pages;
         List<Model.SettingsPropertyItem> properties;
         Model.SettingsPageItem selectedPage;
+        bool restartNotify;
 
         Properties.Settings settings
         {
@@ -78,7 +80,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 {
                     settings.Save();
                     Model.ThemeManager.Update();
-                    MessageBox.Show("Settings saved", "Settings", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Settings saved." + (restartNotify ? " Changes will be accepted after restart" : ""), "Settings", MessageBoxButton.OK, MessageBoxImage.Information);
                 });
             }
         }
@@ -110,18 +112,50 @@ namespace NotepadOnlineDesktop.ViewModel
             askSaveCheckBox.Checked += (s, e) => settings.askonexit = true;
             askSaveCheckBox.Unchecked += (s, e) => settings.askonexit = false;
 
+            var fontSize = new ComboBox()
+            {
+                Width = 120,
+                SelectedValue = settings.fontSize,
+                ItemsSource = new[] { 10, 12, 14, 16, 18, 20 }
+            };
+            fontSize.SelectionChanged += (s, e) =>
+            {
+                var value = (int)((ComboBox)s).SelectedValue;
+                if (value != settings.fontSize)
+                {
+                    restartNotify = true;
+                    settings.fontSize = value;
+                }
+            };
+
+            var fontFamily = new ComboBox()
+            {
+                Width = 120,
+                SelectedValue = settings.fontFamily,
+                ItemsSource = Fonts.SystemFontFamilies
+            };
+            fontFamily.SelectionChanged += (s, e) =>
+            {
+                var value = (FontFamily)((ComboBox)s).SelectedValue;
+                if (value != settings.fontFamily)
+                {
+                    restartNotify = true;
+                    settings.fontFamily = value;
+                }
+            };
+
             var enableExtensions = new CheckBox()
             {
                 IsChecked = settings.enableExtensions
             };
             enableExtensions.Checked += (s, e) =>
             {
-                RestartNotify("Extensions manager");
+                restartNotify = true;
                 settings.enableExtensions = true;
             };
             enableExtensions.Unchecked += (s, e) =>
             {
-                RestartNotify("Extensions manager");
+                restartNotify = true;
                 settings.enableExtensions = false;
             };
 
@@ -146,6 +180,23 @@ namespace NotepadOnlineDesktop.ViewModel
                     },
                     new Model.SettingsPageItem()
                     {
+                        Header = "Editor",
+                        Properties = new List<Model.SettingsPropertyItem>()
+                        {
+                            new Model.SettingsPropertyItem()
+                            {
+                                Header = "Font size",
+                                Control = fontSize
+                            },
+                            new Model.SettingsPropertyItem()
+                            {
+                                Header = "Font family",
+                                Control = fontFamily
+                            }
+                        }
+                    },
+                    new Model.SettingsPageItem()
+                    {
                         Header="Extensions",
                         Properties = new List<Model.SettingsPropertyItem>()
                         {
@@ -160,11 +211,6 @@ namespace NotepadOnlineDesktop.ViewModel
             
             SelectedPage = Pages[0];
             Properties = SelectedPage.Properties;
-        }
-
-        void RestartNotify(string title)
-        {
-            MessageBox.Show("Changes will be accepted after restart", title, MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         public void Closed(object sender, EventArgs e)

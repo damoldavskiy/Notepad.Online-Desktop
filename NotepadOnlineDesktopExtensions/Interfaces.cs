@@ -17,7 +17,7 @@ namespace NotepadOnlineDesktopExtensions
 
     public interface IApplicationInstance
     {
-        string Text { get; }
+        string Text { get; set; }
         string Name { get; }
         void Open(string name);
         void OpenFolder(string path);

@@ -52,15 +52,15 @@ namespace CloudExtension
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
-            var dir = path.Text.Trim();
-            if (!Directory.Exists(dir))
+            var info = new DirectoryInfo(path.Text.Trim() + "\\");
+            if (!info.Exists)
             {
                 MessageBox.Show("Directory doesn't exist", "Error");
                 return;
             }
-
+            
             var properties = Properties.Settings.Default;
-            properties.token = dir;
+            properties.path = info.FullName;
             properties.Save();
             accept.IsEnabled = false;
         }
