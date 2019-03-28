@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:NotepadOnlineDesktop.View"
         mc:Ignorable="d"
         Title="Replace" Height="140" Width="300"
-        ResizeMode="NoResize">
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
