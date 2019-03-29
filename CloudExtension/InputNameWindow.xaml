@@ -10,8 +10,8 @@
     <StackPanel>
         <TextBox Height="20" Margin="10" Text="{Binding Text}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10,0">
-            <Button Click="Submit_Click" Padding="20,2" Margin="10,0">Submit</Button>
-            <Button Click="Cancel_Click" Padding="20,2">Cancel</Button>
+            <Button Click="Submit_Click" Padding="20,2" IsDefault="True" Margin="10,0">Submit</Button>
+            <Button Click="Cancel_Click" Padding="20,2" IsCancel="True">Cancel</Button>
         </StackPanel>
     </StackPanel>
 </Window>

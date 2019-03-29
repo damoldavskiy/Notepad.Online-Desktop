@@ -9,7 +9,7 @@ namespace CloudExtension
             InitializeComponent();
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        void Register_Click(object sender, RoutedEventArgs e)
         {
             if (password.Password != conf_password.Password)
             {
@@ -28,7 +28,7 @@ namespace CloudExtension
             MessageBox.Show("You'll receive confirmation code in 1-3 minutes. Type one in the box below", "Success");
         }
 
-        private void Confirm_Click(object sender, RoutedEventArgs e)
+        void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.RegistrationConfirmation)
             {

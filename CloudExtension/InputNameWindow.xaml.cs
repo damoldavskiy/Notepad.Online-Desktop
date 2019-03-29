@@ -40,15 +40,14 @@ namespace CloudExtension
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
         }
 
-        private void Submit_Click(object sender, RoutedEventArgs e)
+        void Submit_Click(object sender, RoutedEventArgs e)
         {
             Close();
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
+        void Cancel_Click(object sender, RoutedEventArgs e)
         {
             Canceled = true;
-            Close();
         }
     }
 }

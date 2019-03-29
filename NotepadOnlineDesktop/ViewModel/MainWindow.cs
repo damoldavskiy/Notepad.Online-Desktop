@@ -212,7 +212,7 @@ namespace NotepadOnlineDesktop.ViewModel
 
                 try
                 {
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
                     //Model.ExtensionManager.Load(@"Extensions\");
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
@@ -360,7 +360,7 @@ namespace NotepadOnlineDesktop.ViewModel
 
         void Open(string name)
         {
-            text.Text = File.ReadAllText(name, Encoding.UTF8);
+            text.Text = File.ReadAllText(name, Encoding.Default);
             Name = name;
             Saved = true;
         }

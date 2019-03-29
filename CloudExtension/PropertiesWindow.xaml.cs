@@ -11,7 +11,7 @@ namespace CloudExtension
             Initialize();
         }
 
-        private void Initialize()
+        void Initialize()
         {
             var properties = Properties.Settings.Default;
             email.Text = properties.email;
@@ -21,7 +21,7 @@ namespace CloudExtension
             accept.IsEnabled = false;
         }
 
-        private async void Login_Click(object sender, RoutedEventArgs e)
+        async void Login_Click(object sender, RoutedEventArgs e)
         {
             var log = email.Text.Trim();
             var pass = password.Password.Trim();
@@ -42,7 +42,7 @@ namespace CloudExtension
             MessageBox.Show("You are signed in", "Success");
         }
 
-        private void Register_Click(object sender, RoutedEventArgs e)
+        void Register_Click(object sender, RoutedEventArgs e)
         {
             new RegistrationWindow().ShowDialog();
             Properties.Settings.Default.email = DataBase.Manager.Email;
@@ -50,7 +50,7 @@ namespace CloudExtension
             Initialize();
         }
 
-        private void Accept_Click(object sender, RoutedEventArgs e)
+        void Accept_Click(object sender, RoutedEventArgs e)
         {
             var info = new DirectoryInfo(path.Text.Trim() + "\\");
             if (!info.Exists)
@@ -65,7 +65,7 @@ namespace CloudExtension
             accept.IsEnabled = false;
         }
 
-        private void Local_Changed(object sender, RoutedEventArgs e)
+        void Local_Changed(object sender, RoutedEventArgs e)
         {
             if (path.Text.Length > 0)
                 accept.IsEnabled = true;
