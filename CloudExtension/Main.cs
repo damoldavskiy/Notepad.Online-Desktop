@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+using static DataBase.ReturnCodeDescriptions;
+
 namespace CloudExtension
 {
     [Export(typeof(IExtension))]
@@ -73,7 +75,7 @@ namespace CloudExtension
             var result = await DataBase.Manager.LoginAsync(Settings.Default.email, Settings.Default.password, Settings.Default.token);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show("Log in failed: " + result, "Cloud Extension");
+                MessageBox.Show("Log in failed. " + result.GetDescription(), "Cloud Extension");
                 return;
             }
 
@@ -124,7 +126,7 @@ namespace CloudExtension
             var result = DataBase.Manager.DelData(name);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"Error: {result}", "Deleting failed");
+                MessageBox.Show($"File not deleted. " + result.GetDescription(), "Deleting failed");
                 return;
             }
             File.Delete(app.Name);
@@ -147,7 +149,7 @@ namespace CloudExtension
             var result = DataBase.Manager.GetNames();
 
             if (result.Item1 != DataBase.ReturnCode.Success)
-                MessageBox.Show($"Error: {result.Item1}", "Updating failed");
+                MessageBox.Show($"Files not updated. " + result.Item1.GetDescription(), "Updating failed");
 
             await UpdateFolderAsync();
 
@@ -188,11 +190,11 @@ namespace CloudExtension
                         result = await DataBase.Manager.EditTextAsync(name, app.Text);
 
                     if (result != DataBase.ReturnCode.Success)
-                        MessageBox.Show($"Error: {result}", "Saving failed");
+                        MessageBox.Show($"File not saved. " + result.GetDescription(), "Saving failed");
                 }
             }
             else
-                MessageBox.Show($"Error: {result}", "Saving failed");
+                MessageBox.Show($"File not saved. " + result.GetDescription(), "Saving failed");
         }
 
         private void ClearFolder()

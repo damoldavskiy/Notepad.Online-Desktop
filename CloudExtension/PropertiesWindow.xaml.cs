@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Windows;
 
+using static DataBase.ReturnCodeDescriptions;
+
 namespace CloudExtension
 {
     public partial class PropertiesWindow : Window
@@ -29,7 +31,7 @@ namespace CloudExtension
             var result = await DataBase.Manager.LoginAsync(log, pass);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show("Error occured while authorizing: " + result, "Not authorized");
+                MessageBox.Show("Error occured while authorizing. " + result.GetDescription(), "Not authorized");
                 return;
             }
 

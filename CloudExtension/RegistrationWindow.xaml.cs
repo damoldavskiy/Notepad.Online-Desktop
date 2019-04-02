@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 
+using static DataBase.ReturnCodeDescriptions;
+
 namespace CloudExtension
 {
     public partial class RegistrationWindow : Window
@@ -21,11 +23,11 @@ namespace CloudExtension
 
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"Registration failed: {result}", "Error");
+                MessageBox.Show($"Registration failed. {result.GetDescription()}", "Error");
                 return;
             }
 
-            MessageBox.Show("You'll receive confirmation code in 1-3 minutes. Type one in the box below", "Success");
+            MessageBox.Show("You'll receive confirmation code in several minutes. Type one in the box below", "Success");
         }
 
         void Confirm_Click(object sender, RoutedEventArgs e)
@@ -40,7 +42,7 @@ namespace CloudExtension
 
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"Confirmation failed: {result}", "Error");
+                MessageBox.Show($"Confirmation failed. {result.GetDescription()}", "Error");
                 return;
             }
 

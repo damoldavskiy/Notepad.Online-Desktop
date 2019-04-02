@@ -3,9 +3,6 @@ using System.Windows;
 
 namespace CloudExtension
 {
-    /// <summary>
-    /// Логика взаимодействия для InputPage.xaml
-    /// </summary>
     public partial class InputNameWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
