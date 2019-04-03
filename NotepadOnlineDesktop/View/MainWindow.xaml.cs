@@ -12,9 +12,11 @@ namespace NotepadOnlineDesktop.View
 
             InitializeComponent();
 
-            var viewModel = new ViewModel.MainWindow(text, extensions);
-            viewModel.Close = Close;
-            
+            var viewModel = new ViewModel.MainWindow(text, extensions)
+            {
+                Close = Close
+            };
+
             Closing += viewModel.Closing;
             CommandBindings.AddRange(viewModel.Bindings);
             DataContext = viewModel;

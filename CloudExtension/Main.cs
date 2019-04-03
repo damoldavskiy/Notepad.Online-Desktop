@@ -83,7 +83,9 @@ namespace CloudExtension
         }
 
         public async Task OnStop()
-        { }
+        {
+            await Task.CompletedTask;
+        }
 
         async void SaveInCloud_Click(object sender, RoutedEventArgs e)
         {

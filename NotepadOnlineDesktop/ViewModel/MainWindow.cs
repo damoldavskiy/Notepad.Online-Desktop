@@ -195,18 +195,20 @@ namespace NotepadOnlineDesktop.ViewModel
 
             if (Properties.Settings.Default.enableExtensions)
             {
-                var instance = new Instance();
-                instance.GetName = () => name;
-                instance.GetText = () => text.Text;
-                instance.SetText = value => text.Text = value;
-                instance.OpenFile = name => Open(name);
-                instance.OpenDirectory = path =>
+                var instance = new Instance
                 {
-                    if (AskBeforeClear())
+                    GetName = () => name,
+                    GetText = () => text.Text,
+                    SetText = value => text.Text = value,
+                    OpenFile = name => Open(name),
+                    OpenDirectory = path =>
                     {
-                        var name = GetNameToOpen(path);
-                        if (name != null)
-                            Open(name);
+                        if (AskBeforeClear())
+                        {
+                            var name = GetNameToOpen(path);
+                            if (name != null)
+                                Open(name);
+                        }
                     }
                 };
 
@@ -278,8 +280,10 @@ namespace NotepadOnlineDesktop.ViewModel
 
         void Find_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var findWindow = new View.FindWindow();
-            findWindow.Owner = View.MainWindow.Instance;
+            var findWindow = new View.FindWindow
+            {
+                Owner = View.MainWindow.Instance
+            };
             findWindow.ViewModel.RequestFind += (s, args) =>
             {
                 int index;
@@ -306,8 +310,10 @@ namespace NotepadOnlineDesktop.ViewModel
 
         private void Replace_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var replaceWindow = new View.ReplaceWindow();
-            replaceWindow.Owner = View.MainWindow.Instance;
+            var replaceWindow = new View.ReplaceWindow
+            {
+                Owner = View.MainWindow.Instance
+            };
             replaceWindow.ViewModel.RequestReplace += (s, args) =>
             {
                 var comp = args.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
@@ -342,18 +348,22 @@ namespace NotepadOnlineDesktop.ViewModel
 
         string GetNameToOpen(string defaultPath=null)
         {
-            var dialog = new OpenFileDialog();
-            dialog.Filter = "Text file (*.txt)|*.txt";
-            dialog.InitialDirectory = defaultPath;
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Text file (*.txt)|*.txt",
+                InitialDirectory = defaultPath
+            };
 
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
 
         string GetNameToSave(string defaultPath=null)
         {
-            var dialog = new SaveFileDialog();
-            dialog.Filter = "Text file (*.txt)|*.txt";
-            dialog.InitialDirectory = defaultPath;
+            var dialog = new SaveFileDialog
+            {
+                Filter = "Text file (*.txt)|*.txt",
+                InitialDirectory = defaultPath
+            };
 
             return dialog.ShowDialog() == true ? dialog.FileName : null;
         }
