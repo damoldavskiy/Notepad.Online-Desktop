@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -76,9 +77,16 @@ namespace SnippetsExtension
 
                 snippets.Add(DecodeSnippet(template, headers, value));
             }
-
-            snippets.Sort((a, b) => a.Template.Contains(b.Template) ? 0 : 1);
-            snippets.Reverse();
+            
+            for (int i = 0; i < snippets.Count; i++)
+                for (int j = 0; j < snippets.Count; j++)
+                    if (snippets[i].Template.Contains(snippets[j].Template))
+                        if (i > j)
+                        {
+                            var m = snippets[i];
+                            snippets[i] = snippets[j];
+                            snippets[j] = m;
+                        }
 
             return snippets.ToArray();
         }
@@ -93,6 +101,33 @@ namespace SnippetsExtension
                 BeginOnly = headers.Contains("B")
             };
 
+            var python = false;
+            var start = -1;
+            var end = -1;
+            for (int i = 0; i < value.Length; i++)
+            {
+                if (value[i] == '`' && !python)
+                {
+                    snippet.ContainsPythonCode = true;
+                    snippet.PythonPosition = start = i;
+                    python = true;
+                    continue;
+                }
+
+                if (value[i] == '`' && python)
+                {
+                    end = i;
+                    python = false;
+                    continue;
+                }
+            }
+
+            if (snippet.ContainsPythonCode)
+            {
+                snippet.PythonCode = value.Substring(start + 1, end - start - 1);
+                value = value.Substring(0, start) + value.Substring(end + 1);
+            }
+
             for (int i = 0; i < value.Length - 2; i++)
                 if (value[i] != '\\' && value[i + 1] == '$' && char.IsDigit(value[i + 2]))
                 {
@@ -100,6 +135,15 @@ namespace SnippetsExtension
                     {
                         snippet.CustomEndPosition = true;
                         snippet.EndPosition = i + 1;
+                        value = value.Remove(i + 1, 2);
+                    }
+                    else
+                    {
+                        snippet.CustomMiddlePositions = true;
+                        if (snippet.MiddlePositions == null)
+                            snippet.MiddlePositions = new List<MultiCaret>(9);
+                        int index = value[i + 2] - '0';
+                        snippet.MiddlePositions[index - 1].Positions.Add(i + 1);
                         value = value.Remove(i + 1, 2);
                     }
                 }

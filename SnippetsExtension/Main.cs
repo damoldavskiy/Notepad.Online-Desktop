@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
+using IronPython.Hosting;
+using Microsoft.Scripting.Hosting;
+
 namespace SnippetsExtension
 {
     [Export(typeof(IExtension))]
@@ -19,9 +22,11 @@ namespace SnippetsExtension
 
         public string Author => "DMSoft";
 
-        public string Description => "Snippets allows user to use fast replace strings";
+        public string Description => "Snippets allows user to use fast replace strings and other IDE tools";
 
         Snippet[] snippets;
+        ScriptEngine engine;
+        ScriptScope scope;
 
         public List<MenuItem> Menu
         {
@@ -41,8 +46,10 @@ namespace SnippetsExtension
         {
             properties = new MenuItem() { Header = "Properties" };
             properties.Click += Properties_Click;
-
+            
             snippets = Importer.Load(Directory.GetCurrentDirectory() + "\\snippets.ini");
+            engine = Python.CreateEngine();
+            scope = engine.CreateScope();
         }
 
         public async Task OnStart(IApplicationInstance instance)
@@ -65,7 +72,6 @@ namespace SnippetsExtension
 
             var text = app.Text;
             var pos = app.SelectionStart;
-            var math = text.Substring(0, pos).Count(c => c == '$') % 2 == 1;
 
             // Snippets
             var _text = text.Insert(pos, e.Key.ToString());
@@ -73,28 +79,42 @@ namespace SnippetsExtension
             foreach (var snippet in snippets)
                 if (_pos >= snippet.Template.Length && _text.Substring(_pos - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                 {
-                    var put_orig = math || snippet.BeginOnly;
-
                     if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
                         return;
 
+                    var value = snippet.Value;
+
+                    if (snippet.ContainsPythonCode)
+                    {
+                        engine.Execute(snippet.PythonCode, scope);
+                        value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
+                    }
+
                     _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
-                    _text = _text.Insert(_pos - snippet.Template.Length, put_orig ? snippet.Value : '$' + snippet.Value + '$');
+                    _text = _text.Insert(_pos - snippet.Template.Length, value);
 
                     app.Text = _text;
-                    app.SelectionStart = _pos - snippet.Template.Length + snippet.Value.Length;
+                    app.SelectionStart = _pos - snippet.Template.Length + value.Length;
                     if (snippet.CustomEndPosition)
-                        app.SelectionStart += snippet.EndPosition - snippet.Value.Length;
-                    if (!put_orig)
-                        app.SelectionStart += 1;
+                        app.SelectionStart += snippet.EndPosition - value.Length;
 
                     e.Handled = true;
                     return;
                 }
 
-            // Double braces
             char[] sB = { '$', '{', '[', '(' };
             char[] eB = { '$', '}', ']', ')' };
+
+            // Skip braces
+            for (int i = 0; i < sB.Length; i++)
+                if (e.Key == eB[i] && pos < text.Length && text[pos] == eB[i])
+                {
+                    app.SelectionStart++;
+                    e.Handled = true;
+                    return;
+                }
+
+            // Double braces
             for (int i = 0; i < sB.Length; i++)
                 if (e.Key == sB[i])
                 {
