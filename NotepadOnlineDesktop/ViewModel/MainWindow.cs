@@ -20,6 +20,8 @@ namespace NotepadOnlineDesktop.ViewModel
     {
         class Instance : IApplicationInstance
         {
+            public event InputHandler OnInput;
+
             public string Text
             {
                 get
@@ -40,6 +42,30 @@ namespace NotepadOnlineDesktop.ViewModel
                 }
             }
 
+            public int SelectionStart
+            {
+                get
+                {
+                    return GetSelectionStart();
+                }
+                set
+                {
+                    SetSelectionStart(value);
+                }
+            }
+
+            public int SelectionLength
+            {
+                get
+                {
+                    return GetSelectionLength();
+                }
+                set
+                {
+                    SetSelectionLength(value);
+                }
+            }
+
             public void Open(string name)
             {
                 OpenFile(name);
@@ -50,9 +76,20 @@ namespace NotepadOnlineDesktop.ViewModel
                 OpenDirectory(path);
             }
 
+            public bool RaiseOnInput(char key)
+            {
+                var args = new NotepadOnlineDesktopExtensions.InputEventArgs(key);
+                OnInput?.Invoke(this, args);
+                return args.Handled;
+            }
+
             public Func<string> GetText;
             public Action<string> SetText;
             public Func<string> GetName;
+            public Func<int> GetSelectionStart;
+            public Action<int> SetSelectionStart;
+            public Func<int> GetSelectionLength;
+            public Action<int> SetSelectionLength;
             public Action<string> OpenFile;
             public Action<string> OpenDirectory;
         }
@@ -174,7 +211,7 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             if (Properties.Settings.Default.fontFamily is null)
                 Properties.Settings.Default.fontFamily = Fonts.SystemFontFamilies.Where(font => font.ToString() == "Consolas").First();
-
+            
             this.text = text;
             text.FontFamily = Properties.Settings.Default.fontFamily;
             text.FontSize = Properties.Settings.Default.fontSize;
@@ -200,6 +237,10 @@ namespace NotepadOnlineDesktop.ViewModel
                     GetName = () => name,
                     GetText = () => text.Text,
                     SetText = value => text.Text = value,
+                    GetSelectionStart = () => text.SelectionStart,
+                    SetSelectionStart = (value) => text.SelectionStart = value,
+                    GetSelectionLength = () => text.SelectionLength,
+                    SetSelectionLength = (value) => text.SelectionLength = value,
                     OpenFile = name => Open(name),
                     OpenDirectory = path =>
                     {
@@ -211,6 +252,7 @@ namespace NotepadOnlineDesktop.ViewModel
                         }
                     }
                 };
+                text.PreviewTextInput += (s, e) => { e.Handled = instance.RaiseOnInput(e.Text[0]); };
 
                 try
                 {
