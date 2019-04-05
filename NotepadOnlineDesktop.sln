@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotepadOnlineDesktopExtensi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CloudExtension", "CloudExtension\CloudExtension.csproj", "{24ED3714-0BFE-4A7F-A247-3009CF2FEF06}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnippetsExtension", "SnippetsExtension\SnippetsExtension.csproj", "{ADC8FD21-97AA-4D59-8267-34E9978FC1F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{24ED3714-0BFE-4A7F-A247-3009CF2FEF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24ED3714-0BFE-4A7F-A247-3009CF2FEF06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24ED3714-0BFE-4A7F-A247-3009CF2FEF06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADC8FD21-97AA-4D59-8267-34E9978FC1F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADC8FD21-97AA-4D59-8267-34E9978FC1F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADC8FD21-97AA-4D59-8267-34E9978FC1F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADC8FD21-97AA-4D59-8267-34E9978FC1F5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

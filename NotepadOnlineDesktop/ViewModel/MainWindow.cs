@@ -252,11 +252,21 @@ namespace NotepadOnlineDesktop.ViewModel
                         }
                     }
                 };
+                text.PreviewKeyDown += (s, e) =>
+                {
+                    if (e.Key == Key.Tab)
+                        e.Handled = instance.RaiseOnInput('\t');
+                    if (e.Key == Key.Space)
+                        e.Handled = instance.RaiseOnInput(' ');
+                    if (e.Key == Key.Enter)
+                        e.Handled = instance.RaiseOnInput('\r');
+                };
                 text.PreviewTextInput += (s, e) => { e.Handled = instance.RaiseOnInput(e.Text[0]); };
 
                 try
                 {
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
+                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Release\");
                     //Model.ExtensionManager.Load(@"Extensions\");
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
