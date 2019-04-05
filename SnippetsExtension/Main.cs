@@ -73,14 +73,21 @@ namespace SnippetsExtension
             foreach (var snippet in snippets)
                 if (_pos >= snippet.Template.Length && _text.Substring(_pos - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                 {
-                    if (snippet.BeginOnly && pos > snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
+                    var put_orig = math || snippet.BeginOnly;
+
+                    if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
                         return;
+
                     _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
-                    _text = _text.Insert(_pos - snippet.Template.Length, math || snippet.BeginOnly ? snippet.Value : '$' + snippet.Value + '$');
+                    _text = _text.Insert(_pos - snippet.Template.Length, put_orig ? snippet.Value : '$' + snippet.Value + '$');
+
                     app.Text = _text;
-                    app.SelectionStart = _pos - snippet.Template.Length + snippet.Value.Length + (math ? 0 : 2);
+                    app.SelectionStart = _pos - snippet.Template.Length + snippet.Value.Length;
                     if (snippet.CustomEndPosition)
                         app.SelectionStart += snippet.EndPosition - snippet.Value.Length;
+                    if (!put_orig)
+                        app.SelectionStart += 1;
+
                     e.Handled = true;
                     return;
                 }

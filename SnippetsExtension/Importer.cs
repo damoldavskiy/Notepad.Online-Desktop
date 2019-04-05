@@ -99,7 +99,7 @@ namespace SnippetsExtension
                     if (value[i + 2] == '0')
                     {
                         snippet.CustomEndPosition = true;
-                        snippet.EndPosition = i;
+                        snippet.EndPosition = i + 1;
                         value = value.Remove(i + 1, 2);
                     }
                 }
