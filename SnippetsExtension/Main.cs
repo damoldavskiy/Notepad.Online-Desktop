@@ -110,7 +110,8 @@ namespace SnippetsExtension
             // Middle input
             if (middle)
             {
-                if (e.Key != '\t')
+                string recog = RecognizeSimpleSnippets(middleWord + e.Key);
+                if (e.Key != '\t' || middleWord + e.Key != recog)
                 {
                     string value;
 
@@ -129,8 +130,9 @@ namespace SnippetsExtension
                     }
                     else
                     {
-                        middleWord += e.Key;
-                        value = Snippet.MiddleUpdate(middleValue, middleWord, middleIndex);
+                        var oldword = middleWord;
+                        middleWord = recog;
+                        value = Snippet.MiddleUpdate(middleValue, oldword, middleWord, middleIndex);
                     }
 
                     if (app.SelectionStart < currentPos || app.SelectionStart > currentPos + value.Length)
@@ -147,6 +149,7 @@ namespace SnippetsExtension
                     app.Text = text;
                     app.SelectionStart = currentPos + Snippet.Index(middleValue, middleIndex) + middleWord.Length;
                     e.Handled = true;
+                    return;
                 }
                 else
                 {
@@ -249,6 +252,27 @@ namespace SnippetsExtension
                         e.Handled = true;
                         return;
                     }
+        }
+
+        string RecognizeSimpleSnippets(string word)
+        {
+            foreach (var snippet in snippets)
+                if (Snippet.Index(snippet.Value, 1) == -1 && !snippet.BeginOnly)
+                    if (word.Length >= snippet.Template.Length && word.Substring(word.Length - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
+                    {
+                        var value = snippet.Value;
+
+                        if (snippet.ContainsPythonCode)
+                        {
+                            engine.Execute(snippet.PythonCode, scope);
+                            value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
+                        }
+
+                        var middleValue = value;
+                        value = Snippet.ClearValue(value);
+                        return word.Substring(0, word.Length - snippet.Template.Length) + value;
+                    }
+            return word;
         }
 
         void Properties_Click(object sender, RoutedEventArgs e)

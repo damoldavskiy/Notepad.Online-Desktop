@@ -31,11 +31,18 @@ namespace SnippetsExtension
             return match.Success ? match.Index : -1;
         }
 
-        public static string MiddleUpdate(string value, string word, int index)
+        /*public static string MiddleUpdate(string value, string word, int index)
         {
             var find = @"(?<!\\)\$" + index;
             return Regex.Replace(value, find + Regex.Escape(word.Substring(0, word.Length - 1)), "$$" + index + word);
+        }*/
+
+        public static string MiddleUpdate(string value, string oldword, string newword, int index)
+        {
+            var find = @"(?<!\\)\$" + index;
+            return Regex.Replace(value, find + Regex.Escape(oldword), "$$" + index + newword);
         }
+
         public static string MiddleDelete(string value, string word, int index)
         {
             var find = @"(?<!\\)\$" + index;
