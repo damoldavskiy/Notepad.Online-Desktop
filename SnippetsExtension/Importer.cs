@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace SnippetsExtension
@@ -21,7 +22,7 @@ namespace SnippetsExtension
             var headers = "";
             var value = "";
 
-            using (var stream = new StreamReader(path))
+            using (var stream = new StreamReader(path, Encoding.Default))
             {
                 while (!stream.EndOfStream)
                 {
