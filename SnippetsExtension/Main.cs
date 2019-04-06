@@ -195,9 +195,9 @@ namespace SnippetsExtension
                 }
             }
 
+            // Snippets
             if (Properties.Settings.Default.snippets)
             {
-                // Snippets
                 foreach (var snippet in snippets)
                 {
                     var _text = text.Insert(pos, e.Key.ToString());
@@ -225,7 +225,8 @@ namespace SnippetsExtension
 
                         middleValue = value;
                         value = Snippet.ClearValue(value);
-                        if (snippet.CustomMiddlePositions)
+                        var customMiddlePositions = Snippet.Index(middleValue, 1) != -1;
+                        if (customMiddlePositions)
                         {
                             middle = true;
                             middleIndex = 1;
@@ -240,7 +241,7 @@ namespace SnippetsExtension
                         app.Text = _text + tail;
                         app.SelectionStart = _pos - match.Value.Length;
 
-                        if (snippet.CustomMiddlePositions)
+                        if (customMiddlePositions)
                         {
                             app.SelectionStart += Snippet.Index(middleValue, 1);
                         }
@@ -267,7 +268,8 @@ namespace SnippetsExtension
 
                         middleValue = value;
                         value = Snippet.ClearValue(value);
-                        if (snippet.CustomMiddlePositions)
+                        var customMiddlePositions = Snippet.Index(middleValue, 1) != -1;
+                        if (customMiddlePositions)
                         {
                             middle = true;
                             middleIndex = 1;
@@ -282,7 +284,7 @@ namespace SnippetsExtension
                         app.Text = _text;
                         app.SelectionStart = _pos - snippet.Template.Length;
 
-                        if (snippet.CustomMiddlePositions)
+                        if (customMiddlePositions)
                         {
                             app.SelectionStart += Snippet.Index(middleValue, 1);
                         }

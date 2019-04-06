@@ -98,6 +98,14 @@ namespace SnippetsExtension
         {
             headers = headers.ToUpper();
 
+            if (headers.Contains("W"))
+            {
+                if (!headers.Contains("R"))
+                    template = Regex.Escape(template);
+                template = @"(?<![a-zA-Z0-9])" + template;
+                headers += "R";
+            }
+
             var snippet = new Snippet
             {
                 Template = template + (headers.Contains("A") ? "" : "\t"),
@@ -135,21 +143,7 @@ namespace SnippetsExtension
                 value = value.Substring(0, start) + value.Substring(end + 1);
             }
 
-            // Dollars
-            /*for (int i = 0; i < value.Length - 2; i++)
-                if (value[i] != '\\' && value[i + 1] == '$' && char.IsDigit(value[i + 2]))
-                {
-                    if (value[i + 2] == '0')
-                    {
-                        snippet.CustomEndPosition = true;
-                        snippet.EndPosition = i + 1;
-                        value = value.Remove(i + 1, 2);
-                        i -= 2;
-                    }
-                }*/
-            snippet.CustomMiddlePositions = Regex.IsMatch(value, @"(?<!\\)\$[1-9]");
-
-            if (!Regex.IsMatch(value, @"(?<!\\)\$0"))
+            if (Snippet.Index(value, 0) == -1)
                 value += "$0";
 
             snippet.Value = value;

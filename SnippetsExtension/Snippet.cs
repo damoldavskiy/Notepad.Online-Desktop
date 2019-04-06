@@ -7,7 +7,6 @@ namespace SnippetsExtension
     {
         public string Template { get; set; }
         public string Value { get; set; }
-        public bool CustomMiddlePositions { get; set; }
         public bool BeginOnly { get; set; }
         public bool UsesRegex { get; set; }
         public bool ContainsPythonCode { get; set; }
