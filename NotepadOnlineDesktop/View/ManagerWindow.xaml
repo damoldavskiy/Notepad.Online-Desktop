@@ -5,43 +5,44 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:NotepadOnlineDesktop.View"
         mc:Ignorable="d"
-        Title="Extensions Manager" Height="300" Width="500"
-        ResizeMode="NoResize">
+        Title="Extensions Manager" Height="300" Width="500">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
-        <ListBox ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}">
+        <ListBox ScrollViewer.CanContentScroll="False" ItemsSource="{Binding Extensions}" SelectedItem="{Binding SelectedExtension}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
 
-                        <Label Content="Name:"/>
-                        <Label Content="Status:" Grid.Row="1"/>
-                        <Label Content="Version:" Grid.Row="2"/>
-                        <Label Content="Author:" Grid.Row="3"/>
-                        <Label Content="Description:" Grid.Row="4"/>
+                            <Label Content="Name:"/>
+                            <Label Content="Status:" Grid.Row="1"/>
+                            <Label Content="Version:" Grid.Row="2"/>
+                            <Label Content="Author:" Grid.Row="3"/>
+                            <Label Content="Description:" Grid.Row="4"/>
 
-                        <Label Content="{Binding Name}" Grid.Column="1"/>
-                        <Label Grid.Column="1" Grid.Row="1" Content="{Binding Status}">
-                        </Label>
-                        <Label Content="{Binding Version}" Grid.Column="1" Grid.Row="2"/>
-                        <Label Content="{Binding Author}" Grid.Column="1" Grid.Row="3"/>
-                        <Label Content="{Binding Description}" Grid.Column="1" Grid.Row="4"/>
-                    </Grid>
+                            <Label Content="{Binding Name}" Grid.Column="1"/>
+                            <Label Grid.Column="1" Grid.Row="1" Content="{Binding Status}"/>
+                            <Label Content="{Binding Version}" Grid.Column="1" Grid.Row="2"/>
+                            <Label Content="{Binding Author}" Grid.Column="1" Grid.Row="3"/>
+                            <Label Content="{Binding Description}" Grid.Column="1" Grid.Row="4"/>
+                        </Grid>
+                        <Separator/>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>

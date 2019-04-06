@@ -7,8 +7,6 @@ namespace SnippetsExtension
     {
         public string Template { get; set; }
         public string Value { get; set; }
-        //public bool CustomEndPosition { get; set; }
-        //public int EndPosition { get; set; }
         public bool CustomMiddlePositions { get; set; }
         public bool BeginOnly { get; set; }
         public bool UsesRegex { get; set; }
@@ -28,6 +26,7 @@ namespace SnippetsExtension
 
         public static int Index(string value, int index)
         {
+            value = Regex.Replace(value, $@"(?<!\\)\$[^{index}]", "");
             var match = Regex.Match(value, @"(?<!\\)\$" + index);
             return match.Success ? match.Index : -1;
         }

@@ -75,7 +75,7 @@ namespace SnippetsExtension
 
         void App_OnInput(object sender, InputEventArgs e)
         {
-            if (app.SelectionLength > 0)
+            if (app.SelectionLength > 0 || e.Key == '\0')
             {
                 middle = false;
                 return;
@@ -110,19 +110,40 @@ namespace SnippetsExtension
             var pos = app.SelectionStart;
 
             // Middle input
+            if (middle && (app.SelectionStart < currentPos + Snippet.Index(middleValue, middleIndex) || app.SelectionStart > currentPos + Snippet.Index(middleValue, middleIndex) + middleWord.Length))
+                middle = false;
             if (middle)
             {
-                string recog = RecognizeSimpleSnippets(middleWord + e.Key);
-                if (e.Key != '\t' || middleWord + e.Key != recog)
+                int delta;
+                var newCursorPos = pos - currentPos - Snippet.Index(middleValue, middleIndex);
+                var newMiddle = middleWord.Insert(newCursorPos, e.Key.ToString());
+                string recog = RecognizeSimpleSnippets(newMiddle, out delta);
+                if (e.Key != '\t' || newMiddle != recog)
                 {
                     string value;
 
                     if (e.Key == '\b')
                     {
-                        if (middleWord.Length > 0)
+                        if (newCursorPos > 0)
                         {
-                            value = Snippet.MiddleDelete(middleValue, middleWord, middleIndex);
-                            middleWord = middleWord.Substring(0, middleWord.Length - 1);
+                            newMiddle = middleWord.Remove(newCursorPos - 1, 1);
+                            value = Snippet.MiddleUpdate(middleValue, middleWord, newMiddle, middleIndex);
+                            middleWord = newMiddle;
+                            newCursorPos--;
+                        }
+                        else
+                        {
+                            e.Handled = true;
+                            return;
+                        }
+                    }
+                    else if (e.Key == '\a')
+                    {
+                        if (newCursorPos < middleWord.Length)
+                        {
+                            newMiddle = middleWord.Remove(newCursorPos, 1);
+                            value = Snippet.MiddleUpdate(middleValue, middleWord, newMiddle, middleIndex);
+                            middleWord = newMiddle;
                         }
                         else
                         {
@@ -135,12 +156,7 @@ namespace SnippetsExtension
                         var oldword = middleWord;
                         middleWord = recog;
                         value = Snippet.MiddleUpdate(middleValue, oldword, middleWord, middleIndex);
-                    }
-
-                    if (app.SelectionStart < currentPos || app.SelectionStart > currentPos + value.Length)
-                    {
-                        middle = false;
-                        return;
+                        newCursorPos++;
                     }
 
                     middleValue = value;
@@ -149,7 +165,7 @@ namespace SnippetsExtension
                     text = text.Insert(currentPos, value);
                     currentLength = value.Length;
                     app.Text = text;
-                    app.SelectionStart = currentPos + Snippet.Index(middleValue, middleIndex) + middleWord.Length;
+                    app.SelectionStart = currentPos + Snippet.Index(middleValue, middleIndex) + newCursorPos + delta;
                     e.Handled = true;
                     return;
                 }
@@ -183,6 +199,9 @@ namespace SnippetsExtension
 
                 if (snippet.UsesRegex)
                 {
+                    var tail = _text.Substring(_pos);
+                    _text = _text.Substring(0, _pos);
+
                     var matches = Regex.Matches(_text, snippet.Template);
                     if (matches.Count == 0)
                         continue;
@@ -212,7 +231,7 @@ namespace SnippetsExtension
                     _text = _text.Remove(_pos - match.Value.Length, match.Value.Length);
                     _text = _text.Insert(_pos - match.Value.Length, value);
 
-                    app.Text = _text;
+                    app.Text = _text + tail;
                     app.SelectionStart = _pos - match.Value.Length;
 
                     if (snippet.CustomMiddlePositions)
@@ -294,7 +313,7 @@ namespace SnippetsExtension
                 }
         }
 
-        string RecognizeSimpleSnippets(string word)
+        string RecognizeSimpleSnippets(string word, out int delta)
         {
             foreach (var snippet in snippets)
                 if (Snippet.Index(snippet.Value, 1) == -1 && !snippet.BeginOnly)
@@ -317,6 +336,8 @@ namespace SnippetsExtension
 
                         var middleValue = value;
                         value = Snippet.ClearValue(value);
+
+                        delta = Snippet.Index(middleValue, 0) - match.Value.Length;
                         return word.Substring(0, word.Length - match.Value.Length) + value;
                     }
                     else if (word.Length >= snippet.Template.Length && word.Substring(word.Length - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
@@ -331,8 +352,12 @@ namespace SnippetsExtension
 
                         var middleValue = value;
                         value = Snippet.ClearValue(value);
+
+                        delta = Snippet.Index(middleValue, 0) - snippet.Template.Length;
                         return word.Substring(0, word.Length - snippet.Template.Length) + value;
                     }
+
+            delta = 0;
             return word;
         }
 
