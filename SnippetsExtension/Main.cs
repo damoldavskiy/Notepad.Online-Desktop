@@ -1,15 +1,15 @@
-﻿using NotepadOnlineDesktopExtensions;
+﻿using IronPython.Hosting;
+
+using Microsoft.Scripting.Hosting;
+
+using NotepadOnlineDesktopExtensions;
 
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Linq;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-
-using IronPython.Hosting;
-using Microsoft.Scripting.Hosting;
 
 namespace SnippetsExtension
 {
@@ -27,6 +27,12 @@ namespace SnippetsExtension
         Snippet[] snippets;
         ScriptEngine engine;
         ScriptScope scope;
+        bool middle;
+        int middleIndex;
+        string middleWord;
+        string middleValue;
+        int currentPos;
+        int currentLength;
 
         public List<MenuItem> Menu
         {
@@ -68,10 +74,101 @@ namespace SnippetsExtension
         void App_OnInput(object sender, InputEventArgs e)
         {
             if (app.SelectionLength > 0)
+            {
+                middle = false;
                 return;
+            }
+
+            // Spaces
+            if (e.Key == '\r' && !middle)
+            {
+                var remember_pos = app.SelectionStart;
+                var txt = app.Text.Substring(0, remember_pos);
+                var ind = txt.LastIndexOf('\n');
+                if (ind < 0)
+                    ind = 0;
+                var t = txt.Substring(ind + 1);
+                
+                int c = 0;
+                for (int i = 0; i < t.Length; i++)
+                    if (t[i] == ' ')
+                        c++;
+                    else
+                        break;
+                string s = "";
+                for (int i = 0; i < c; i++)
+                    s += " ";
+                app.Text = app.Text.Insert(app.SelectionStart, "\n" + s);
+                app.SelectionStart = remember_pos + c + 1;
+                e.Handled = true;
+                return;
+            }
 
             var text = app.Text;
             var pos = app.SelectionStart;
+
+            // Middle input
+            if (middle)
+            {
+                if (e.Key != '\t')
+                {
+                    string value;
+
+                    if (e.Key == '\b')
+                    {
+                        if (middleWord.Length > 0)
+                        {
+                            value = Snippet.MiddleDelete(middleValue, middleWord, middleIndex);
+                            middleWord = middleWord.Substring(0, middleWord.Length - 1);
+                        }
+                        else
+                        {
+                            e.Handled = true;
+                            return;
+                        }
+                    }
+                    else
+                    {
+                        middleWord += e.Key;
+                        value = Snippet.MiddleUpdate(middleValue, middleWord, middleIndex);
+                    }
+
+                    if (app.SelectionStart < currentPos || app.SelectionStart > currentPos + value.Length)
+                    {
+                        middle = false;
+                        return;
+                    }
+
+                    middleValue = value;
+                    value = Snippet.ClearValue(value);
+                    text = text.Remove(currentPos, currentLength);
+                    text = text.Insert(currentPos, value);
+                    currentLength = value.Length;
+                    app.Text = text;
+                    app.SelectionStart = currentPos + Snippet.Index(middleValue, middleIndex) + middleWord.Length;
+                    e.Handled = true;
+                }
+                else
+                {
+                    middleValue = Snippet.ClearValue(middleValue, middleIndex);
+                    if (Snippet.Index(middleValue, ++middleIndex) != -1)
+                    {
+                        middleWord = "";
+                        app.SelectionStart = currentPos + Snippet.Index(middleValue, middleIndex);
+                    }
+                    else
+                    {
+                        if (Snippet.Index(middleValue, 0) != -1)
+                        {
+                            app.SelectionStart = currentPos + Snippet.Index(middleValue, 0);
+                        }
+                        middle = false;
+                    }
+
+                    e.Handled = true;
+                    return;
+                }
+            }
 
             // Snippets
             var _text = text.Insert(pos, e.Key.ToString());
@@ -81,7 +178,7 @@ namespace SnippetsExtension
                 {
                     if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
                         return;
-
+                    
                     var value = snippet.Value;
 
                     if (snippet.ContainsPythonCode)
@@ -90,13 +187,31 @@ namespace SnippetsExtension
                         value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
                     }
 
+                    middleValue = value;
+                    value = Snippet.ClearValue(value);
+                    if (snippet.CustomMiddlePositions)
+                    {
+                        middle = true;
+                        middleIndex = 1;
+                        middleWord = "";
+                        currentPos = _pos - snippet.Template.Length;
+                        currentLength = value.Length;
+                    }
+
                     _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
                     _text = _text.Insert(_pos - snippet.Template.Length, value);
 
                     app.Text = _text;
-                    app.SelectionStart = _pos - snippet.Template.Length + value.Length;
-                    if (snippet.CustomEndPosition)
-                        app.SelectionStart += snippet.EndPosition - value.Length;
+                    app.SelectionStart = _pos - snippet.Template.Length;
+
+                    if (snippet.CustomMiddlePositions)
+                    {
+                        app.SelectionStart += Snippet.Index(middleValue, 1);
+                    }
+                    else
+                    {
+                        app.SelectionStart += Snippet.Index(middleValue, 0);
+                    }
 
                     e.Handled = true;
                     return;

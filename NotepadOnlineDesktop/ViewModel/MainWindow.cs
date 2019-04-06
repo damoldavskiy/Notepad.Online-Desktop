@@ -260,13 +260,15 @@ namespace NotepadOnlineDesktop.ViewModel
                         e.Handled = instance.RaiseOnInput(' ');
                     if (e.Key == Key.Enter)
                         e.Handled = instance.RaiseOnInput('\r');
+                    if (e.Key == Key.Back)
+                        e.Handled = instance.RaiseOnInput('\b');
                 };
                 text.PreviewTextInput += (s, e) => { e.Handled = instance.RaiseOnInput(e.Text[0]); };
 
                 try
                 {
                     //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Release\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
                     //Model.ExtensionManager.Load(@"Extensions\");
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }

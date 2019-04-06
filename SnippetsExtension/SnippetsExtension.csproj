@@ -76,7 +76,6 @@
     <Compile Include="Importer.cs" />
     <Compile Include="ImporterState.cs" />
     <Compile Include="Main.cs" />
-    <Compile Include="MultiCaret.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace SnippetsExtension
 {
@@ -25,7 +25,7 @@ namespace SnippetsExtension
                     var line = stream.ReadLine();
 
                     if (state == ImporterState.ReadingTemplate)
-                        if (line.StartsWith("snippet"))
+                        if (line.StartsWith(_snippet))
                         {
                             line = line.Remove(0, _snippet.Length).Trim();
                             if (line[0] != '\'')
@@ -101,6 +101,7 @@ namespace SnippetsExtension
                 BeginOnly = headers.Contains("B")
             };
 
+            // Python
             var python = false;
             var start = -1;
             var end = -1;
@@ -108,6 +109,8 @@ namespace SnippetsExtension
             {
                 if (value[i] == '`' && !python)
                 {
+                    if (snippet.ContainsPythonCode)
+                        throw new Exception(); // Более одного блока Python
                     snippet.ContainsPythonCode = true;
                     snippet.PythonPosition = start = i;
                     python = true;
@@ -121,14 +124,15 @@ namespace SnippetsExtension
                     continue;
                 }
             }
-
+            
             if (snippet.ContainsPythonCode)
             {
                 snippet.PythonCode = value.Substring(start + 1, end - start - 1);
                 value = value.Substring(0, start) + value.Substring(end + 1);
             }
 
-            for (int i = 0; i < value.Length - 2; i++)
+            // Dollars
+            /*for (int i = 0; i < value.Length - 2; i++)
                 if (value[i] != '\\' && value[i + 1] == '$' && char.IsDigit(value[i + 2]))
                 {
                     if (value[i + 2] == '0')
@@ -136,17 +140,13 @@ namespace SnippetsExtension
                         snippet.CustomEndPosition = true;
                         snippet.EndPosition = i + 1;
                         value = value.Remove(i + 1, 2);
+                        i -= 2;
                     }
-                    else
-                    {
-                        snippet.CustomMiddlePositions = true;
-                        if (snippet.MiddlePositions == null)
-                            snippet.MiddlePositions = new List<MultiCaret>(9);
-                        int index = value[i + 2] - '0';
-                        snippet.MiddlePositions[index - 1].Positions.Add(i + 1);
-                        value = value.Remove(i + 1, 2);
-                    }
-                }
+                }*/
+            snippet.CustomMiddlePositions = Regex.IsMatch(value, @"(?<!\\)\$[1-9]");
+
+            if (!Regex.IsMatch(value, @"(?<!\\)\$0"))
+                value += "$0";
 
             snippet.Value = value;
 
