@@ -271,9 +271,11 @@ namespace NotepadOnlineDesktop.ViewModel
 
                 try
                 {
-                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Release\");
+                    #if DEBUG
                     Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
-                    //Model.ExtensionManager.Load(@"Extensions\");
+                    #else
+                    Model.ExtensionManager.Load(@"Extensions\");
+                    #endif
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
                 catch (DirectoryNotFoundException)

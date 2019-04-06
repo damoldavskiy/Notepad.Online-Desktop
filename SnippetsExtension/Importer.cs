@@ -11,6 +11,9 @@ namespace SnippetsExtension
 
         public static Snippet[] Load(string path)
         {
+            if (!File.Exists(path))
+                return new Snippet[0];
+
             var snippets = new List<Snippet>();
 
             var state = ImporterState.ReadingTemplate;

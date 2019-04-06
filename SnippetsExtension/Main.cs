@@ -82,28 +82,31 @@ namespace SnippetsExtension
             }
 
             // Spaces
-            if (e.Key == '\r' && !middle)
+            if (Properties.Settings.Default.spaces)
             {
-                var remember_pos = app.SelectionStart;
-                var txt = app.Text.Substring(0, remember_pos);
-                var ind = txt.LastIndexOf('\n');
-                if (ind < 0)
-                    ind = 0;
-                var t = txt.Substring(ind + 1);
-                
-                int c = 0;
-                for (int i = 0; i < t.Length; i++)
-                    if (t[i] == ' ')
-                        c++;
-                    else
-                        break;
-                string s = "";
-                for (int i = 0; i < c; i++)
-                    s += " ";
-                app.Text = app.Text.Insert(app.SelectionStart, "\n" + s);
-                app.SelectionStart = remember_pos + c + 1;
-                e.Handled = true;
-                return;
+                if (e.Key == '\r' && !middle)
+                {
+                    var remember_pos = app.SelectionStart;
+                    var txt = app.Text.Substring(0, remember_pos);
+                    var ind = txt.LastIndexOf('\n');
+                    if (ind < 0)
+                        ind = 0;
+                    var t = txt.Substring(ind + 1);
+
+                    int c = 0;
+                    for (int i = 0; i < t.Length; i++)
+                        if (t[i] == ' ')
+                            c++;
+                        else
+                            break;
+                    string s = "";
+                    for (int i = 0; i < c; i++)
+                        s += " ";
+                    app.Text = app.Text.Insert(app.SelectionStart, "\n" + s);
+                    app.SelectionStart = remember_pos + c + 1;
+                    e.Handled = true;
+                    return;
+                }
             }
 
             var text = app.Text;
@@ -116,7 +119,9 @@ namespace SnippetsExtension
             {
                 int delta;
                 var newCursorPos = pos - currentPos - Snippet.Index(middleValue, middleIndex);
-                var newMiddle = middleWord.Insert(newCursorPos, e.Key.ToString());
+                var newMiddle = "";
+                if (e.Key != '\b' && e.Key != '\a')
+                    newMiddle = InsertText(middleWord, e.Key, ref newCursorPos);
                 string recog = RecognizeSimpleSnippets(newMiddle, out delta);
                 if (e.Key != '\t' || newMiddle != recog)
                 {
@@ -156,7 +161,6 @@ namespace SnippetsExtension
                         var oldword = middleWord;
                         middleWord = recog;
                         value = Snippet.MiddleUpdate(middleValue, oldword, middleWord, middleIndex);
-                        newCursorPos++;
                     }
 
                     middleValue = value;
@@ -191,126 +195,144 @@ namespace SnippetsExtension
                 }
             }
 
-            // Snippets
-            foreach (var snippet in snippets)
+            if (Properties.Settings.Default.snippets)
             {
-                var _text = text.Insert(pos, e.Key.ToString());
-                var _pos = pos + 1;
-
-                if (snippet.UsesRegex)
+                // Snippets
+                foreach (var snippet in snippets)
                 {
-                    var tail = _text.Substring(_pos);
-                    _text = _text.Substring(0, _pos);
+                    var _text = text.Insert(pos, e.Key.ToString());
+                    var _pos = pos + 1;
 
-                    var matches = Regex.Matches(_text, snippet.Template);
-                    if (matches.Count == 0)
-                        continue;
-                    var match = matches[matches.Count - 1];
-                    if (match.Index + match.Length < _text.Count())
-                        continue;
-
-                    var value = snippet.Value;
-                    if (snippet.ContainsPythonCode)
+                    if (snippet.UsesRegex)
                     {
-                        scope.SetVariable("word", match.Value);
-                        engine.Execute(snippet.PythonCode, scope);
-                        value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
-                    }
+                        var tail = _text.Substring(_pos);
+                        _text = _text.Substring(0, _pos);
 
-                    middleValue = value;
-                    value = Snippet.ClearValue(value);
-                    if (snippet.CustomMiddlePositions)
+                        var matches = Regex.Matches(_text, snippet.Template);
+                        if (matches.Count == 0)
+                            continue;
+                        var match = matches[matches.Count - 1];
+                        if (match.Index + match.Length < _text.Count())
+                            continue;
+
+                        var value = snippet.Value;
+                        if (snippet.ContainsPythonCode)
+                        {
+                            scope.SetVariable("word", match.Value);
+                            engine.Execute(snippet.PythonCode, scope);
+                            value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
+                        }
+
+                        middleValue = value;
+                        value = Snippet.ClearValue(value);
+                        if (snippet.CustomMiddlePositions)
+                        {
+                            middle = true;
+                            middleIndex = 1;
+                            middleWord = "";
+                            currentPos = _pos - match.Value.Length;
+                            currentLength = value.Length;
+                        }
+
+                        _text = _text.Remove(_pos - match.Value.Length, match.Value.Length);
+                        _text = _text.Insert(_pos - match.Value.Length, value);
+
+                        app.Text = _text + tail;
+                        app.SelectionStart = _pos - match.Value.Length;
+
+                        if (snippet.CustomMiddlePositions)
+                        {
+                            app.SelectionStart += Snippet.Index(middleValue, 1);
+                        }
+                        else
+                        {
+                            app.SelectionStart += Snippet.Index(middleValue, 0);
+                        }
+
+                        e.Handled = true;
+                        return;
+                    }
+                    else if (_pos >= snippet.Template.Length && _text.Substring(_pos - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                     {
-                        middle = true;
-                        middleIndex = 1;
-                        middleWord = "";
-                        currentPos = _pos - match.Value.Length;
-                        currentLength = value.Length;
+                        if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
+                            continue;
+
+                        var value = snippet.Value;
+
+                        if (snippet.ContainsPythonCode)
+                        {
+                            engine.Execute(snippet.PythonCode, scope);
+                            value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
+                        }
+
+                        middleValue = value;
+                        value = Snippet.ClearValue(value);
+                        if (snippet.CustomMiddlePositions)
+                        {
+                            middle = true;
+                            middleIndex = 1;
+                            middleWord = "";
+                            currentPos = _pos - snippet.Template.Length;
+                            currentLength = value.Length;
+                        }
+
+                        _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
+                        _text = _text.Insert(_pos - snippet.Template.Length, value);
+
+                        app.Text = _text;
+                        app.SelectionStart = _pos - snippet.Template.Length;
+
+                        if (snippet.CustomMiddlePositions)
+                        {
+                            app.SelectionStart += Snippet.Index(middleValue, 1);
+                        }
+                        else
+                        {
+                            app.SelectionStart += Snippet.Index(middleValue, 0);
+                        }
+
+                        e.Handled = true;
+                        return;
                     }
-
-                    _text = _text.Remove(_pos - match.Value.Length, match.Value.Length);
-                    _text = _text.Insert(_pos - match.Value.Length, value);
-
-                    app.Text = _text + tail;
-                    app.SelectionStart = _pos - match.Value.Length;
-
-                    if (snippet.CustomMiddlePositions)
-                    {
-                        app.SelectionStart += Snippet.Index(middleValue, 1);
-                    }
-                    else
-                    {
-                        app.SelectionStart += Snippet.Index(middleValue, 0);
-                    }
-
-                    e.Handled = true;
-                    return;
-                }
-                else if (_pos >= snippet.Template.Length && _text.Substring(_pos - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
-                {
-                    if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
-                        continue;
-
-                    var value = snippet.Value;
-
-                    if (snippet.ContainsPythonCode)
-                    {
-                        engine.Execute(snippet.PythonCode, scope);
-                        value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
-                    }
-
-                    middleValue = value;
-                    value = Snippet.ClearValue(value);
-                    if (snippet.CustomMiddlePositions)
-                    {
-                        middle = true;
-                        middleIndex = 1;
-                        middleWord = "";
-                        currentPos = _pos - snippet.Template.Length;
-                        currentLength = value.Length;
-                    }
-
-                    _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
-                    _text = _text.Insert(_pos - snippet.Template.Length, value);
-
-                    app.Text = _text;
-                    app.SelectionStart = _pos - snippet.Template.Length;
-
-                    if (snippet.CustomMiddlePositions)
-                    {
-                        app.SelectionStart += Snippet.Index(middleValue, 1);
-                    }
-                    else
-                    {
-                        app.SelectionStart += Snippet.Index(middleValue, 0);
-                    }
-
-                    e.Handled = true;
-                    return;
                 }
             }
 
-            char[] sB = { '$', '{', '[', '(' };
-            char[] eB = { '$', '}', ']', ')' };
+            if (e.Key != '\b' && e.Key != '\a')
+            {
+                app.Text = InsertText(text, e.Key, ref pos);
+                app.SelectionStart = pos;
+                e.Handled = true;
+            }
+        }
 
-            // Skip braces
-            for (int i = 0; i < sB.Length; i++)
-                if (e.Key == eB[i] && pos < text.Length && text[pos] == eB[i])
-                {
-                    app.SelectionStart++;
-                    e.Handled = true;
-                    return;
-                }
+        string InsertText(string text, char key, ref int pos)
+        {
+            if (Properties.Settings.Default.brackets)
+            {
+                char[] sB = { '$', '{', '[', '(' };
+                char[] eB = { '$', '}', ']', ')' };
 
-            // Double braces
-            for (int i = 0; i < sB.Length; i++)
-                if (e.Key == sB[i])
-                {
-                    app.Text = text.Insert(pos, sB[i].ToString() + eB[i]);
-                    app.SelectionStart = pos + 1;
-                    e.Handled = true;
-                    return;
-                }
+                // Skip braces
+                for (int i = 0; i < sB.Length; i++)
+                    if (key == eB[i] && pos < text.Length && text[pos] == eB[i])
+                    {
+                        pos++;
+                        return text;
+                    }
+
+                // Double braces
+                for (int i = 0; i < sB.Length; i++)
+                    if (key == sB[i])
+                    {
+                        text = text.Insert(pos, sB[i].ToString() + eB[i]);
+                        pos++;
+                        return text;
+                    }
+            }
+
+            text = text.Insert(pos, key.ToString());
+            pos++;
+            return text;
         }
 
         string RecognizeSimpleSnippets(string word, out int delta)
@@ -363,7 +385,7 @@ namespace SnippetsExtension
 
         void Properties_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Not implemented");
+            new PropertiesWindow(app).ShowDialog();
         }
     }
 }
