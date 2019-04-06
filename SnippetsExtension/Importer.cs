@@ -98,7 +98,8 @@ namespace SnippetsExtension
             var snippet = new Snippet
             {
                 Template = template + (headers.Contains("A") ? "" : "\t"),
-                BeginOnly = headers.Contains("B")
+                BeginOnly = headers.Contains("B"),
+                UsesRegex = headers.Contains("R")
             };
 
             // Python

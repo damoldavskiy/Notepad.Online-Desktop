@@ -11,6 +11,7 @@ namespace SnippetsExtension
         //public int EndPosition { get; set; }
         public bool CustomMiddlePositions { get; set; }
         public bool BeginOnly { get; set; }
+        public bool UsesRegex { get; set; }
         public bool ContainsPythonCode { get; set; }
         public string PythonCode { get; set; }
         public int PythonPosition { get; set; }
@@ -30,12 +31,6 @@ namespace SnippetsExtension
             var match = Regex.Match(value, @"(?<!\\)\$" + index);
             return match.Success ? match.Index : -1;
         }
-
-        /*public static string MiddleUpdate(string value, string word, int index)
-        {
-            var find = @"(?<!\\)\$" + index;
-            return Regex.Replace(value, find + Regex.Escape(word.Substring(0, word.Length - 1)), "$$" + index + word);
-        }*/
 
         public static string MiddleUpdate(string value, string oldword, string newword, int index)
         {
