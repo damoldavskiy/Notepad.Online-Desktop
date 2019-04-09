@@ -267,7 +267,7 @@ namespace NotepadOnlineDesktop.ViewModel
                     if (e.Key == Key.Delete)
                         e.Handled = instance.RaiseOnInput('\a');
                 };
-                text.PreviewTextInput += (s, e) => { e.Handled = instance.RaiseOnInput(e.Text[0]); };
+                text.PreviewTextInput += (s, e) => { if (e.Text.Length > 0) e.Handled = instance.RaiseOnInput(e.Text[0]); };
 
                 try
                 {

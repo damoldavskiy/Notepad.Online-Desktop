@@ -119,12 +119,15 @@ namespace SnippetsExtension
                 middle = false;
             if (middle)
             {
-                int delta;
+                var delta = 0;
                 var newCursorPos = pos - currentPos - Snippet.Index(middleValue, middleIndex);
                 var newMiddle = "";
+                var recog = "";
                 if (e.Key != '\b' && e.Key != '\a')
+                {
                     newMiddle = InsertText(middleWord, e.Key, ref newCursorPos);
-                string recog = RecognizeSimpleSnippets(newMiddle, out delta);
+                    recog = RecognizeSimpleSnippets(newMiddle, newCursorPos, out delta);
+                }
                 if (e.Key != '\t' || newMiddle != recog)
                 {
                     string value;
@@ -336,17 +339,20 @@ namespace SnippetsExtension
             return text;
         }
 
-        string RecognizeSimpleSnippets(string word, out int delta)
+        string RecognizeSimpleSnippets(string word, int pos, out int delta)
         {
             foreach (var snippet in snippets)
                 if (Snippet.Index(snippet.Value, 1) == -1 && !snippet.BeginOnly)
                     if (snippet.UsesRegex)
                     {
-                        var matches = Regex.Matches(word, snippet.Template);
+                        var part1 = word.Substring(0, pos);
+                        var part2 = word.Length > pos ? word.Substring(pos) : "";
+
+                        var matches = Regex.Matches(part1, snippet.Template);
                         if (matches.Count == 0)
                             continue;
                         var match = matches[matches.Count - 1];
-                        if (match.Index + match.Length < word.Count())
+                        if (match.Index + match.Length < part1.Count())
                             continue;
 
                         var value = snippet.Value;
@@ -359,9 +365,8 @@ namespace SnippetsExtension
 
                         var middleValue = value;
                         value = Snippet.ClearValue(value);
-
                         delta = Snippet.Index(middleValue, 0) - match.Value.Length;
-                        return word.Substring(0, word.Length - match.Value.Length) + value;
+                        return part1.Substring(0, part1.Length - match.Value.Length) + value + part2;
                     }
                     else if (word.Length >= snippet.Template.Length && word.Substring(word.Length - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                     {
