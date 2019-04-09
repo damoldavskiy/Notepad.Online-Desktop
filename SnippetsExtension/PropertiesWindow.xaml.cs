@@ -50,16 +50,29 @@ namespace SnippetsExtension
             Properties.Settings.Default.Save();
         }
 
-        void File_Click(object sender, RoutedEventArgs e)
+        void Snippets_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\snippets.ini"))
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini"))
             {
-                app.Open(Directory.GetCurrentDirectory() + "\\snippets.ini");
+                app.Open(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini");
                 Close();
             }
             else
             {
                 MessageBox.Show("Snippets file not found", "Error");
+            }
+        }
+
+        void Brackets_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini"))
+            {
+                app.Open(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini");
+                Close();
+            }
+            else
+            {
+                MessageBox.Show("Brackets file not found", "Error");
             }
         }
     }

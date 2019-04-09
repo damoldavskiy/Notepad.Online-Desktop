@@ -10,7 +10,33 @@ namespace SnippetsExtension
     {
         static readonly string _snippet = "snippet";
 
-        public static Snippet[] Load(string path)
+        public static Bracket[] LoadBrackets(string path)
+        {
+            if (!File.Exists(path))
+                return new Bracket[0];
+
+            var brackets = new List<Bracket>();
+
+            using (var stream = new StreamReader(path, Encoding.Default))
+            {
+                while (!stream.EndOfStream)
+                {
+                    var line = stream.ReadLine();
+
+                    if (string.IsNullOrWhiteSpace(line) || line.StartsWith("#"))
+                        continue;
+
+                    if (line.Length != 2)
+                        throw new Exception(); // Ожидалось 2 символа
+
+                    brackets.Add(new Bracket { Start = line[0], End = line[1] });
+                }
+            }
+
+            return brackets.ToArray();
+        }
+
+        public static Snippet[] LoadSnippets(string path)
         {
             if (!File.Exists(path))
                 return new Snippet[0];
@@ -99,11 +125,14 @@ namespace SnippetsExtension
         {
             headers = headers.ToUpper();
 
+            if (headers.Contains("B") && headers.Contains("R"))
+                template = "^" + template;
+
             if (headers.Contains("W"))
             {
                 if (!headers.Contains("R"))
                     template = Regex.Escape(template);
-                template = @"(?<![a-zA-Z0-9])" + template;
+                template = @"(?<![a-zA-Z])" + template;
                 headers += "R";
             }
 

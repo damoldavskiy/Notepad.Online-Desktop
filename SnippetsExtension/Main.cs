@@ -27,6 +27,7 @@ namespace SnippetsExtension
         public string Description => "Snippets allows user to use fast replace strings and other IDE tools";
 
         Snippet[] snippets;
+        Bracket[] brackets;
         ScriptEngine engine;
         ScriptScope scope;
         bool middle;
@@ -55,7 +56,8 @@ namespace SnippetsExtension
             properties = new MenuItem() { Header = "Properties" };
             properties.Click += Properties_Click;
             
-            snippets = Importer.Load(Directory.GetCurrentDirectory() + "\\snippets.ini");
+            snippets = Importer.LoadSnippets(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini");
+            brackets = Importer.LoadBrackets(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini");
             engine = Python.CreateEngine();
             scope = engine.CreateScope();
         }
@@ -84,7 +86,7 @@ namespace SnippetsExtension
             // Spaces
             if (Properties.Settings.Default.spaces)
             {
-                if (e.Key == '\r' && !middle)
+                if (e.Key == '\r' && !middle && app.SelectionStart != 0)
                 {
                     var remember_pos = app.SelectionStart;
                     var txt = app.Text.Substring(0, remember_pos);
@@ -208,7 +210,7 @@ namespace SnippetsExtension
                         var tail = _text.Substring(_pos);
                         _text = _text.Substring(0, _pos);
 
-                        var matches = Regex.Matches(_text, snippet.Template);
+                        var matches = Regex.Matches(_text, snippet.Template, RegexOptions.Multiline);
                         if (matches.Count == 0)
                             continue;
                         var match = matches[matches.Count - 1];
@@ -277,7 +279,7 @@ namespace SnippetsExtension
                             currentPos = _pos - snippet.Template.Length;
                             currentLength = value.Length;
                         }
-
+                        
                         _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
                         _text = _text.Insert(_pos - snippet.Template.Length, value);
 
@@ -311,22 +313,19 @@ namespace SnippetsExtension
         {
             if (Properties.Settings.Default.brackets)
             {
-                char[] sB = { '$', '{', '[', '(' };
-                char[] eB = { '$', '}', ']', ')' };
-
                 // Skip braces
-                for (int i = 0; i < sB.Length; i++)
-                    if (key == eB[i] && pos < text.Length && text[pos] == eB[i])
+                for (int i = 0; i < brackets.Length; i++)
+                    if (key == brackets[i].End && pos < text.Length && text[pos] == brackets[i].End)
                     {
                         pos++;
                         return text;
                     }
 
                 // Double braces
-                for (int i = 0; i < sB.Length; i++)
-                    if (key == sB[i])
+                for (int i = 0; i < brackets.Length; i++)
+                    if (key == brackets[i].Start)
                     {
-                        text = text.Insert(pos, sB[i].ToString() + eB[i]);
+                        text = text.Insert(pos, brackets[i].Start.ToString() + brackets[i].End);
                         pos++;
                         return text;
                     }

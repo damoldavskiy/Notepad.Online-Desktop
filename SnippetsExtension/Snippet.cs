@@ -35,11 +35,5 @@ namespace SnippetsExtension
             var find = @"(?<!\\)\$" + index;
             return Regex.Replace(value, find + Regex.Escape(oldword), "$$" + index + newword);
         }
-
-        public static string MiddleDelete(string value, string word, int index)
-        {
-            var find = @"(?<!\\)\$" + index;
-            return Regex.Replace(value, find + Regex.Escape(word), "$$" + index + word.Substring(0, word.Length - 1));
-        }
     }
 }

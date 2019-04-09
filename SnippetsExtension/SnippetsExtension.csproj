@@ -73,6 +73,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Bracket.cs" />
     <Compile Include="Importer.cs" />
     <Compile Include="ImporterState.cs" />
     <Compile Include="Main.cs" />

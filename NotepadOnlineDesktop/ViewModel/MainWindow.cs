@@ -291,7 +291,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 e.Cancel = !AskBeforeClear();
         }
 
-        private void Text_TextChanged(object sender, TextChangedEventArgs e)
+        void Text_TextChanged(object sender, TextChangedEventArgs e)
         {
             Saved = false;
         }
@@ -362,8 +362,8 @@ namespace NotepadOnlineDesktop.ViewModel
                 }
 
                 text.CaretIndex = index + args.Word.Length;
-                text.Select(index, args.Word.Length);
                 text.Focus();
+                text.Select(index, args.Word.Length);
             };
             findWindow.Show();
         }
@@ -397,7 +397,11 @@ namespace NotepadOnlineDesktop.ViewModel
                     if (Name != null)
                         Save(Name);
                     else
-                        Save(GetNameToSave());
+                    {
+                        var name = GetNameToSave();
+                        if (name != null)
+                            Save(name);
+                    }
                     return true;
                 case MessageBoxResult.No:
                     return true;
