@@ -1,4 +1,6 @@
 ﻿using NotepadOnlineDesktopExtensions;
+
+using System;
 using System.IO;
 using System.Windows;
 
@@ -6,6 +8,7 @@ namespace SnippetsExtension
 {
     public partial class PropertiesWindow : Window
     {
+        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory;
         IApplicationInstance app;
 
         public PropertiesWindow(IApplicationInstance app)
@@ -40,9 +43,9 @@ namespace SnippetsExtension
 
         void Snippets_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini"))
+            if (File.Exists(configPath + "\\Config\\Snippets.ini"))
             {
-                app.Open(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini");
+                app.Open(configPath + "\\Config\\Snippets.ini");
                 Close();
             }
             else
@@ -53,9 +56,9 @@ namespace SnippetsExtension
 
         void Brackets_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini"))
+            if (File.Exists(configPath + "\\Config\\Brackets.ini"))
             {
-                app.Open(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini");
+                app.Open(configPath + "\\Config\\Brackets.ini");
                 Close();
             }
             else

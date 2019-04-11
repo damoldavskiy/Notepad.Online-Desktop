@@ -4,14 +4,14 @@ using Microsoft.Scripting.Hosting;
 
 using NotepadOnlineDesktopExtensions;
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
+using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Text.RegularExpressions;
-using System.Linq;
-using System;
 
 namespace SnippetsExtension
 {
