@@ -74,8 +74,8 @@ namespace NotepadOnlineDesktop.ViewModel
                 return new Model.ActionCommand(
                 sender =>
                 {
-                    if (!string.IsNullOrEmpty(OldWord) && !string.IsNullOrEmpty(NewWord))
-                        OnRequestReplace(new Model.ReplaceEventArgs(OldWord, NewWord, IgnoreCase, Regex));
+                    if (!string.IsNullOrEmpty(OldWord))
+                        OnRequestReplace(new Model.ReplaceEventArgs(OldWord, NewWord ?? "", IgnoreCase, Regex));
                 });
             }
         }
