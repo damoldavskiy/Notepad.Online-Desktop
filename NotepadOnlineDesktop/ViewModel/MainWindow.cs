@@ -378,7 +378,7 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 var comp = args.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
 
-                text.Text = Regex.Replace(text.Text, args.OldWord, args.NewWord, comp);
+                text.Text = Regex.Replace(text.Text, args.Regex ? args.OldWord : Regex.Escape(args.OldWord), args.NewWord, comp);
                 text.Focus();
             };
             replaceWindow.Show();

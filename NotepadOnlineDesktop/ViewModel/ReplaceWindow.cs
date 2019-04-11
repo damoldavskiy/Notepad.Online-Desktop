@@ -9,9 +9,11 @@ namespace NotepadOnlineDesktop.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         public event ReplaceHandler RequestReplace;
 
-        private string oldWord;
-        private string newWord;
-        private bool ignoreCase;
+        string oldWord;
+        string newWord;
+        bool ignoreCase;
+        bool regex;
+
 
         public string OldWord
         {
@@ -22,7 +24,7 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 oldWord = value;
-                OnPropertyChanged("OldWord");
+                OnPropertyChanged(nameof(OldWord));
             }
         }
 
@@ -35,7 +37,7 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 newWord = value;
-                OnPropertyChanged("NewWord");
+                OnPropertyChanged(nameof(NewWord));
             }
         }
 
@@ -48,7 +50,20 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 ignoreCase = value;
-                OnPropertyChanged("IgnoreCase");
+                OnPropertyChanged(nameof(IgnoreCase));
+            }
+        }
+
+        public bool Regex
+        {
+            get
+            {
+                return regex;
+            }
+            set
+            {
+                regex = value;
+                OnPropertyChanged(nameof(Regex));
             }
         }
 
@@ -60,7 +75,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 sender =>
                 {
                     if (!string.IsNullOrEmpty(OldWord) && !string.IsNullOrEmpty(NewWord))
-                        OnRequestReplace(new Model.ReplaceEventArgs(OldWord, NewWord, IgnoreCase));
+                        OnRequestReplace(new Model.ReplaceEventArgs(OldWord, NewWord, IgnoreCase, Regex));
                 });
             }
         }

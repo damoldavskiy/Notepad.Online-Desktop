@@ -6,12 +6,12 @@ using NotepadOnlineDesktopExtensions;
 
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Text.RegularExpressions;
 using System.Linq;
+using System;
 
 namespace SnippetsExtension
 {
@@ -26,6 +26,7 @@ namespace SnippetsExtension
 
         public string Description => "Snippets allows user to use fast replace strings and other IDE tools";
 
+        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory;
         Snippet[] snippets;
         Bracket[] brackets;
         ScriptEngine engine;
@@ -56,8 +57,8 @@ namespace SnippetsExtension
             properties = new MenuItem() { Header = "Properties" };
             properties.Click += Properties_Click;
             
-            snippets = Importer.LoadSnippets(Directory.GetCurrentDirectory() + "\\Config\\Snippets.ini");
-            brackets = Importer.LoadBrackets(Directory.GetCurrentDirectory() + "\\Config\\Brackets.ini");
+            snippets = Importer.LoadSnippets(configPath + "\\Config\\Snippets.ini");
+            brackets = Importer.LoadBrackets(configPath + "\\Config\\Brackets.ini");
             engine = Python.CreateEngine();
             scope = engine.CreateScope();
         }
@@ -341,13 +342,13 @@ namespace SnippetsExtension
 
         string RecognizeSimpleSnippets(string word, int pos, out int delta)
         {
+            var part1 = word.Substring(0, pos);
+            var part2 = word.Length > pos ? word.Substring(pos) : "";
+
             foreach (var snippet in snippets)
                 if (Snippet.Index(snippet.Value, 1) == -1 && !snippet.BeginOnly)
                     if (snippet.UsesRegex)
                     {
-                        var part1 = word.Substring(0, pos);
-                        var part2 = word.Length > pos ? word.Substring(pos) : "";
-
                         var matches = Regex.Matches(part1, snippet.Template);
                         if (matches.Count == 0)
                             continue;
@@ -368,7 +369,7 @@ namespace SnippetsExtension
                         delta = Snippet.Index(middleValue, 0) - match.Value.Length;
                         return part1.Substring(0, part1.Length - match.Value.Length) + value + part2;
                     }
-                    else if (word.Length >= snippet.Template.Length && word.Substring(word.Length - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
+                    else if (part1.Length >= snippet.Template.Length && part1.Substring(part1.Length - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                     {
                         var value = snippet.Value;
 
@@ -382,7 +383,7 @@ namespace SnippetsExtension
                         value = Snippet.ClearValue(value);
 
                         delta = Snippet.Index(middleValue, 0) - snippet.Template.Length;
-                        return word.Substring(0, word.Length - snippet.Template.Length) + value;
+                        return part1.Substring(0, part1.Length - snippet.Template.Length) + value + part2;
                     }
 
             delta = 0;
