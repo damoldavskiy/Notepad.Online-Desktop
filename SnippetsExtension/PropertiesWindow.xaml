@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Properties" Height="220" Width="180"
+        Title="Properties" Height="240" Width="180"
         ResizeMode="NoResize">
     <Window.Resources>
         <Style TargetType="CheckBox">
@@ -19,6 +19,7 @@
         <CheckBox x:Name="snippets" Checked="Snippets_Checked" Unchecked="Snippets_Checked" Content="Enable snippets"/>
         <CheckBox x:Name="brackets" Checked="Brackets_Checked" Unchecked="Brackets_Checked" Content="Enable bracket tools"/>
         <CheckBox x:Name="spaces" Checked="Spaces_Checked" Unchecked="Spaces_Checked" Content="Enable smart spaces"/>
+        <CheckBox x:Name="tabs" Checked="Tabs_Checked" Unchecked="Tabs_Checked" Content="Convert tabs to spaces"/>
         <Button Click="Snippets_Click" Content="Open snippets file"/>
         <Button Click="Brackets_Click" Content="Open brackets file"/>
     </StackPanel>

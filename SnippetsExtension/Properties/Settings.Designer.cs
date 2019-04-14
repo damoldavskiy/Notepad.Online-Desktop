@@ -58,5 +58,17 @@ namespace SnippetsExtension.Properties {
                 this["spaces"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool tabs {
+            get {
+                return ((bool)(this["tabs"]));
+            }
+            set {
+                this["tabs"] = value;
+            }
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace SnippetsExtension
 {
     public partial class PropertiesWindow : Window
     {
-        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory;
+        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory + "\\Config\\";
         IApplicationInstance app;
 
         public PropertiesWindow(IApplicationInstance app)
@@ -18,6 +18,7 @@ namespace SnippetsExtension
             snippets.IsChecked = Properties.Settings.Default.snippets;
             brackets.IsChecked = Properties.Settings.Default.brackets;
             spaces.IsChecked = Properties.Settings.Default.spaces;
+            tabs.IsChecked = Properties.Settings.Default.tabs;
         }
 
         void Snippets_Checked(object sender, RoutedEventArgs e)
@@ -41,29 +42,56 @@ namespace SnippetsExtension
             Properties.Settings.Default.Save();
         }
 
+        void Tabs_Checked(object sender, RoutedEventArgs e)
+        {
+            var check = tabs.IsChecked == true;
+            Properties.Settings.Default.tabs = check;
+            Properties.Settings.Default.Save();
+        }
+
         void Snippets_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(configPath + "\\Config\\Snippets.ini"))
+            if (File.Exists(configPath + "Snippets.ini"))
             {
-                app.Open(configPath + "\\Config\\Snippets.ini");
+                app.Open(configPath + "Snippets.ini");
                 Close();
             }
             else
             {
-                MessageBox.Show("Snippets file not found", "Error");
+                var res = MessageBox.Show("Snippets file not found. Do you want to create one?", "Error", MessageBoxButton.YesNo);
+                if (res == MessageBoxResult.Yes)
+                {
+                    Directory.CreateDirectory(configPath);
+                    using (var stream = new StreamWriter(configPath + "Snippets.ini"))
+                    {
+                        stream.Write("#\n# Snippets file\n#");
+                    }
+                    app.Open(configPath + "Snippets.ini");
+                    Close();
+                }
             }
         }
 
         void Brackets_Click(object sender, RoutedEventArgs e)
         {
-            if (File.Exists(configPath + "\\Config\\Brackets.ini"))
+            if (File.Exists(configPath + "Brackets.ini"))
             {
-                app.Open(configPath + "\\Config\\Brackets.ini");
+                app.Open(configPath + "Brackets.ini");
                 Close();
             }
             else
             {
-                MessageBox.Show("Brackets file not found", "Error");
+                var res = MessageBox.Show("Brackets file not found. Do you want to create one?", "Error", MessageBoxButton.YesNo);
+                if (res == MessageBoxResult.Yes)
+                {
+                    Directory.CreateDirectory(configPath);
+                    using (var stream = new StreamWriter(configPath + "Brackets.ini"))
+                    {
+                        stream.Write("#\n# Brackets file\n#");
+                    }
+                    app.Open(configPath + "Brackets.ini");
+                    Close();
+                }
             }
         }
     }

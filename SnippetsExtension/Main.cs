@@ -48,7 +48,7 @@ namespace SnippetsExtension
                 };
             }
         }
-        
+
         MenuItem properties;
         IApplicationInstance app;
 
@@ -56,7 +56,7 @@ namespace SnippetsExtension
         {
             properties = new MenuItem() { Header = "Properties" };
             properties.Click += Properties_Click;
-            
+
             snippets = Importer.LoadSnippets(configPath + "\\Config\\Snippets.ini");
             brackets = Importer.LoadBrackets(configPath + "\\Config\\Brackets.ini");
             engine = Python.CreateEngine();
@@ -83,7 +83,7 @@ namespace SnippetsExtension
                 middle = false;
                 return;
             }
-            
+
             // Spaces
             if (Properties.Settings.Default.spaces)
             {
@@ -199,7 +199,7 @@ namespace SnippetsExtension
                     return;
                 }
             }
-            
+
             // Snippets
             if (Properties.Settings.Default.snippets && e.SpecKey == SpecKey.None)
             {
@@ -215,7 +215,7 @@ namespace SnippetsExtension
                         var match = Regex.Match(head, snippet.Template + @"\Z", RegexOptions.Multiline | RegexOptions.RightToLeft);
                         if (!match.Success)
                             continue;
-                        
+
                         var value = snippet.Value;
                         if (snippet.ContainsPythonCode)
                         {
@@ -279,7 +279,7 @@ namespace SnippetsExtension
                             currentPos = _pos - snippet.Template.Length;
                             currentLength = value.Length;
                         }
-                        
+
                         _text = _text.Remove(_pos - snippet.Template.Length, snippet.Template.Length);
                         _text = _text.Insert(_pos - snippet.Template.Length, value);
 
@@ -316,6 +316,17 @@ namespace SnippetsExtension
                         break;
                     }
             }
+
+            if (Properties.Settings.Default.tabs && e.SpecKey == SpecKey.None)
+            {
+                var inserted = InsertTab(text, e.Key, ref pos);
+                if (inserted != null)
+                {
+                    app.Text = inserted;
+                    app.SelectionStart = pos;
+                    e.Handled = true;
+                }
+            }
         }
 
         string InsertText(string text, char key, ref int pos)
@@ -350,6 +361,18 @@ namespace SnippetsExtension
             {
                 text = text.Insert(pos, start.ToString() + end);
                 pos++;
+                return text;
+            }
+
+            return null;
+        }
+
+        string InsertTab(string text, char key, ref int pos)
+        {
+            if (key == '\t')
+            {
+                text = text.Insert(pos, "    ");
+                pos += 4;
                 return text;
             }
 
