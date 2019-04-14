@@ -149,6 +149,12 @@ namespace SnippetsExtension
             var end = -1;
             for (int i = 0; i < value.Length; i++)
             {
+                if (value[i] == '`' && i > 0 && value[i - 1] == '\\')
+                {
+                    value = value.Remove(i - 1, 1);
+                    continue;
+                }
+                
                 if (value[i] == '`' && !python)
                 {
                     if (snippet.ContainsPythonCode)
