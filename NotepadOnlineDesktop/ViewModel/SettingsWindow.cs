@@ -9,6 +9,8 @@ namespace NotepadOnlineDesktop.ViewModel
 {
     public class SettingsWindow : INotifyPropertyChanged
     {
+        public event EventHandler SettingsUpdated;
+
         List<Model.SettingsPageItem> pages;
         List<Model.SettingsPropertyItem> properties;
         Model.SettingsPageItem selectedPage;
@@ -79,7 +81,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 return new Model.ActionCommand(sender =>
                 {
                     settings.Save();
-                    Model.ThemeManager.Update();
+                    SettingsUpdated?.Invoke(this, EventArgs.Empty);
                     MessageBox.Show("Settings saved." + (restartNotify ? " Changes will be accepted after restart" : ""), "Settings", MessageBoxButton.OK, MessageBoxImage.Information);
                 });
             }
@@ -112,18 +114,29 @@ namespace NotepadOnlineDesktop.ViewModel
             askSaveCheckBox.Checked += (s, e) => settings.askonexit = true;
             askSaveCheckBox.Unchecked += (s, e) => settings.askonexit = false;
 
-            var fontSize = new ComboBox()
+            var fontSize = new TextBox()
             {
                 Width = 120,
-                SelectedValue = settings.fontSize,
-                ItemsSource = new[] { 10, 12, 14, 16, 18, 20 }
+                Text = settings.fontSize.ToString()
             };
             fontSize.SelectionChanged += (s, e) =>
             {
-                var value = (int)((ComboBox)s).SelectedValue;
+                int value;
+                var box = (TextBox)s;
+                if (!int.TryParse(box.Text, out value) || value < 1 || value > 1000)
+                {
+                    box.Background = Brushes.OrangeRed;
+                    box.Foreground = Brushes.White;
+                    return;
+                }
+                else
+                {
+                    box.Background = Brushes.White;
+                    box.Foreground = Brushes.Black;
+                }
+
                 if (value != settings.fontSize)
                 {
-                    restartNotify = true;
                     settings.fontSize = value;
                 }
             };
@@ -139,7 +152,6 @@ namespace NotepadOnlineDesktop.ViewModel
                 var value = (FontFamily)((ComboBox)s).SelectedValue;
                 if (value != settings.fontFamily)
                 {
-                    restartNotify = true;
                     settings.fontFamily = value;
                 }
             };

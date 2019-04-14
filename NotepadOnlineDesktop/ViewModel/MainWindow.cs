@@ -187,7 +187,13 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 return new Model.ActionCommand(sender =>
                 {
-                    new View.SettingsWindow().ShowDialog();
+                    var window = new View.SettingsWindow();
+                    window.ViewModel.SettingsUpdated += (s, e) =>
+                    {
+                        Model.ThemeManager.Update();
+                        UpdateMainTextBox();
+                    };
+                    window.ShowDialog();
                 });
             }
         }
@@ -220,8 +226,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 Properties.Settings.Default.fontFamily = Fonts.SystemFontFamilies.Where(font => font.ToString() == "Consolas").First();
             
             this.text = text;
-            text.FontFamily = Properties.Settings.Default.fontFamily;
-            text.FontSize = Properties.Settings.Default.fontSize;
+            UpdateMainTextBox();
             text.TextChanged += Text_TextChanged;
 
             TextWrap = Properties.Settings.Default.textwrap;
@@ -357,14 +362,6 @@ namespace NotepadOnlineDesktop.ViewModel
             };
             findWindow.ViewModel.RequestFind += (s, args) =>
             {
-                //int index;
-                //var comp = args.IgnoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture;
-
-                //if (args.DownDirection)
-                //    index = text.Text.IndexOf(args.Word, text.CaretIndex + text.SelectionLength, comp);
-                //else
-                //    index = text.Text.LastIndexOf(args.Word, text.CaretIndex, comp);
-
                 string block;
 
                 if (args.DownDirection)
@@ -393,7 +390,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 var index = match.Index;
                 if (args.DownDirection)
                     index += text.SelectionStart + text.SelectionLength;
-                //MessageBox.Show(index.ToString());
+                
                 text.Focus();
                 text.Select(index, match.Length);
             };
@@ -476,6 +473,12 @@ namespace NotepadOnlineDesktop.ViewModel
             File.WriteAllText(name, text.Text, Encoding.UTF8);
             Name = name;
             Saved = true;
+        }
+
+        void UpdateMainTextBox()
+        {
+            text.FontFamily = Properties.Settings.Default.fontFamily;
+            text.FontSize = Properties.Settings.Default.fontSize;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
