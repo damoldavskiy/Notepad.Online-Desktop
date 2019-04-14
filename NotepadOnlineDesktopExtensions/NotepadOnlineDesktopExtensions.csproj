@@ -42,9 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IExtension.cs" />
     <Compile Include="InputEventArgs.cs" />
-    <Compile Include="Interfaces.cs" />
+    <Compile Include="IApplicationInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SpecKey.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

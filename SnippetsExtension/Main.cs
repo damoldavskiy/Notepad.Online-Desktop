@@ -78,7 +78,7 @@ namespace SnippetsExtension
 
         void App_OnInput(object sender, InputEventArgs e)
         {
-            if (app.SelectionLength > 0 || e.Key == '\0')
+            if (app.SelectionLength > 0 || e.SpecKey == SpecKey.Escape)
             {
                 middle = false;
                 return;
@@ -124,7 +124,7 @@ namespace SnippetsExtension
                 var newCursorPos = pos - currentPos - Snippet.Index(middleValue, middleIndex);
                 var newMiddle = "";
                 var recog = "";
-                if (e.Key != '\b' && e.Key != '\a')
+                if (e.SpecKey == SpecKey.None)
                 {
                     newMiddle = InsertText(middleWord, e.Key, ref newCursorPos);
                     recog = RecognizeSimpleSnippets(newMiddle, newCursorPos, out delta);
@@ -133,7 +133,7 @@ namespace SnippetsExtension
                 {
                     string value;
 
-                    if (e.Key == '\b')
+                    if (e.SpecKey == SpecKey.Backspace)
                     {
                         if (newCursorPos > 0)
                         {
@@ -148,7 +148,7 @@ namespace SnippetsExtension
                             return;
                         }
                     }
-                    else if (e.Key == '\a')
+                    else if (e.SpecKey == SpecKey.Delete)
                     {
                         if (newCursorPos < middleWord.Length)
                         {
@@ -200,27 +200,23 @@ namespace SnippetsExtension
                     return;
                 }
             }
-
+            
             // Snippets
-            if (Properties.Settings.Default.snippets)
+            if (Properties.Settings.Default.snippets && e.SpecKey == SpecKey.None)
             {
+                var _text = text.Insert(pos, e.Key.ToString());
+                var _pos = pos + 1;
+                var tail = _text.Substring(_pos);
+                var head = _text.Substring(0, _pos);
+
                 foreach (var snippet in snippets)
                 {
-                    var _text = text.Insert(pos, e.Key.ToString());
-                    var _pos = pos + 1;
-
                     if (snippet.UsesRegex)
                     {
-                        var tail = _text.Substring(_pos);
-                        _text = _text.Substring(0, _pos);
-
-                        var matches = Regex.Matches(_text, snippet.Template, RegexOptions.Multiline);
-                        if (matches.Count == 0)
+                        var match = Regex.Match(head, snippet.Template + @"\Z", RegexOptions.Multiline | RegexOptions.RightToLeft);
+                        if (!match.Success)
                             continue;
-                        var match = matches[matches.Count - 1];
-                        if (match.Index + match.Length < _text.Count())
-                            continue;
-
+                        
                         var value = snippet.Value;
                         if (snippet.ContainsPythonCode)
                         {
@@ -241,6 +237,7 @@ namespace SnippetsExtension
                             currentLength = value.Length;
                         }
 
+                        _text = head;
                         _text = _text.Remove(_pos - match.Value.Length, match.Value.Length);
                         _text = _text.Insert(_pos - match.Value.Length, value);
 
@@ -305,11 +302,20 @@ namespace SnippetsExtension
                 }
             }
 
-            if (e.Key != '\b' && e.Key != '\a')
+            if (Properties.Settings.Default.brackets && e.SpecKey == SpecKey.None)
             {
-                app.Text = InsertText(text, e.Key, ref pos);
-                app.SelectionStart = pos;
-                e.Handled = true;
+                for (int i = 0; i < brackets.Length; i++)
+                    if (e.Key == brackets[i].Start || e.Key == brackets[i].End)
+                    {
+                        var inserted = InsertBracket(text, e.Key, ref pos, brackets[i].Start, brackets[i].End);
+                        if (inserted != null)
+                        {
+                            app.Text = inserted;
+                            app.SelectionStart = pos;
+                            e.Handled = true;
+                        }
+                        break;
+                    }
             }
         }
 
@@ -317,27 +323,38 @@ namespace SnippetsExtension
         {
             if (Properties.Settings.Default.brackets)
             {
-                // Skip braces
                 for (int i = 0; i < brackets.Length; i++)
-                    if (key == brackets[i].End && pos < text.Length && text[pos] == brackets[i].End)
+                    if (key == brackets[i].Start || key == brackets[i].End)
                     {
-                        pos++;
-                        return text;
-                    }
-
-                // Double braces
-                for (int i = 0; i < brackets.Length; i++)
-                    if (key == brackets[i].Start)
-                    {
-                        text = text.Insert(pos, brackets[i].Start.ToString() + brackets[i].End);
-                        pos++;
-                        return text;
+                        var inserted = InsertBracket(text, key, ref pos, brackets[i].Start, brackets[i].End);
+                        if (inserted != null)
+                            return inserted;
+                        else
+                            break;
                     }
             }
 
-            text = text.Insert(pos, key.ToString());
-            pos++;
-            return text;
+            return text.Insert(pos++, key.ToString());
+        }
+
+        string InsertBracket(string text, char key, ref int pos, char start, char end)
+        {
+            // Skip braces
+            if (key == end && pos < text.Length && text[pos] == end)
+            {
+                pos++;
+                return text;
+            }
+
+            // Double braces
+            if (key == start)
+            {
+                text = text.Insert(pos, start.ToString() + end);
+                pos++;
+                return text;
+            }
+
+            return null;
         }
 
         string RecognizeSimpleSnippets(string word, int pos, out int delta)

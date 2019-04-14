@@ -33,7 +33,7 @@ namespace SnippetsExtension
         public static string MiddleUpdate(string value, string oldword, string newword, int index)
         {
             var find = @"(?<!\\)\$" + index;
-            return Regex.Replace(value, find + Regex.Escape(oldword), "$$" + index + newword);
+            return Regex.Replace(value, find + Regex.Escape(oldword), "$$" + index + newword.Replace("$", "$$"));
         }
     }
 }

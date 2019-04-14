@@ -83,6 +83,13 @@ namespace NotepadOnlineDesktop.ViewModel
                 return args.Handled;
             }
 
+            public bool RaiseOnInput(SpecKey specKey)
+            {
+                var args = new NotepadOnlineDesktopExtensions.InputEventArgs(specKey);
+                OnInput?.Invoke(this, args);
+                return args.Handled;
+            }
+
             public Func<string> GetText;
             public Action<string> SetText;
             public Func<string> GetName;
@@ -261,11 +268,11 @@ namespace NotepadOnlineDesktop.ViewModel
                     if (e.Key == Key.Enter)
                         e.Handled = instance.RaiseOnInput('\r');
                     if (e.Key == Key.Back)
-                        e.Handled = instance.RaiseOnInput('\b');
+                        e.Handled = instance.RaiseOnInput(SpecKey.Backspace);
                     if (e.Key == Key.Escape)
-                        e.Handled = instance.RaiseOnInput('\0');
+                        e.Handled = instance.RaiseOnInput(SpecKey.Escape);
                     if (e.Key == Key.Delete)
-                        e.Handled = instance.RaiseOnInput('\a');
+                        e.Handled = instance.RaiseOnInput(SpecKey.Delete);
                 };
                 text.PreviewTextInput += (s, e) => { if (e.Text.Length > 0) e.Handled = instance.RaiseOnInput(e.Text[0]); };
 
