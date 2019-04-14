@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Media;
+using System.Linq;
 
 namespace NotepadOnlineDesktop.ViewModel
 {
@@ -16,7 +17,7 @@ namespace NotepadOnlineDesktop.ViewModel
         Model.SettingsPageItem selectedPage;
         bool restartNotify;
 
-        Properties.Settings settings
+        Properties.Settings Settings
         {
             get
             {
@@ -80,7 +81,7 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 return new Model.ActionCommand(sender =>
                 {
-                    settings.Save();
+                    Settings.Save();
                     SettingsUpdated?.Invoke(this, EventArgs.Empty);
                     MessageBox.Show("Settings saved." + (restartNotify ? " Changes will be accepted after restart" : ""), "Settings", MessageBoxButton.OK, MessageBoxImage.Information);
                 });
@@ -92,7 +93,7 @@ namespace NotepadOnlineDesktop.ViewModel
             var colorThemeComboBox = new ComboBox()
             {
                 Width = 120,
-                SelectedIndex = settings.theme == "light" ? 0 : 1,
+                SelectedIndex = Settings.theme == "light" ? 0 : 1,
                 ItemsSource = new[]
                 {
                         new TextBlock() { Text = "Light" },
@@ -102,28 +103,27 @@ namespace NotepadOnlineDesktop.ViewModel
             colorThemeComboBox.SelectionChanged += (s, e) =>
             {
                 if (((ComboBox)s).SelectedIndex == 0)
-                    settings.theme = "light";
+                    Settings.theme = "light";
                 else
-                    settings.theme = "dark";
+                    Settings.theme = "dark";
             };
 
             var askSaveCheckBox = new CheckBox()
             {
-                IsChecked = settings.askonexit
+                IsChecked = Settings.askonexit
             };
-            askSaveCheckBox.Checked += (s, e) => settings.askonexit = true;
-            askSaveCheckBox.Unchecked += (s, e) => settings.askonexit = false;
+            askSaveCheckBox.Checked += (s, e) => Settings.askonexit = true;
+            askSaveCheckBox.Unchecked += (s, e) => Settings.askonexit = false;
 
             var fontSize = new TextBox()
             {
                 Width = 120,
-                Text = settings.fontSize.ToString()
+                Text = Settings.fontSize.ToString()
             };
             fontSize.SelectionChanged += (s, e) =>
             {
-                int value;
                 var box = (TextBox)s;
-                if (!int.TryParse(box.Text, out value) || value < 1 || value > 1000)
+                if (!int.TryParse(box.Text, out int value) || value < 1 || value > 1000)
                 {
                     box.Background = (Brush)new BrushConverter().ConvertFrom("#E23D3D");
                     box.CaretBrush = Brushes.White;
@@ -137,40 +137,49 @@ namespace NotepadOnlineDesktop.ViewModel
                     box.Foreground = Brushes.Black;
                 }
 
-                if (value != settings.fontSize)
+                if (value != Settings.fontSize)
                 {
-                    settings.fontSize = value;
+                    Settings.fontSize = value;
                 }
             };
 
+            var source = new List<TextBlock>();
+            TextBlock selected = null;
+            foreach (var font in Fonts.SystemFontFamilies)
+            {
+                var current = new TextBlock() { Text = font.ToString(), FontFamily = font };
+                source.Add(current);
+                if (font.Source == Settings.fontFamily.Source)
+                    selected = current;
+            }
             var fontFamily = new ComboBox()
             {
                 Width = 120,
-                SelectedValue = settings.fontFamily,
-                ItemsSource = Fonts.SystemFontFamilies
+                SelectedItem = selected,
+                ItemsSource = source
             };
             fontFamily.SelectionChanged += (s, e) =>
             {
-                var value = (FontFamily)((ComboBox)s).SelectedValue;
-                if (value != settings.fontFamily)
+                var value = (TextBlock)((ComboBox)s).SelectedValue;
+                if (value.FontFamily != Settings.fontFamily)
                 {
-                    settings.fontFamily = value;
+                    Settings.fontFamily = value.FontFamily;
                 }
             };
 
             var enableExtensions = new CheckBox()
             {
-                IsChecked = settings.enableExtensions
+                IsChecked = Settings.enableExtensions
             };
             enableExtensions.Checked += (s, e) =>
             {
                 restartNotify = true;
-                settings.enableExtensions = true;
+                Settings.enableExtensions = true;
             };
             enableExtensions.Unchecked += (s, e) =>
             {
                 restartNotify = true;
-                settings.enableExtensions = false;
+                Settings.enableExtensions = false;
             };
 
             Pages = new List<Model.SettingsPageItem>
@@ -229,7 +238,7 @@ namespace NotepadOnlineDesktop.ViewModel
 
         public void Closed(object sender, EventArgs e)
         {
-            settings.Reload();
+            Settings.Reload();
             Model.ThemeManager.Update();
         }
         
