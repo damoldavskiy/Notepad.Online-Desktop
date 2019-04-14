@@ -8,7 +8,7 @@ namespace SnippetsExtension
 {
     public partial class PropertiesWindow : Window
     {
-        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory + "\\Config\\";
+        readonly string configPath = AppDomain.CurrentDomain.BaseDirectory + "Config\\";
         IApplicationInstance app;
 
         public PropertiesWindow(IApplicationInstance app)
