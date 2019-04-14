@@ -9,7 +9,7 @@ namespace NotepadOnlineDesktop.View
         public ReplaceWindow()
         {
             InitializeComponent();
-
+            text.Focus();
             DataContext = ViewModel = new ViewModel.ReplaceWindow();
         }
     }

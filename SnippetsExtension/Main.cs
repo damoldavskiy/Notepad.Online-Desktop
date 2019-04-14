@@ -83,7 +83,7 @@ namespace SnippetsExtension
                 middle = false;
                 return;
             }
-
+            
             // Spaces
             if (Properties.Settings.Default.spaces)
             {
@@ -92,8 +92,6 @@ namespace SnippetsExtension
                     var remember_pos = app.SelectionStart;
                     var txt = app.Text.Substring(0, remember_pos);
                     var ind = txt.LastIndexOf('\n');
-                    if (ind < 0)
-                        ind = 0;
                     var t = txt.Substring(ind + 1);
 
                     int c = 0;
@@ -102,9 +100,10 @@ namespace SnippetsExtension
                             c++;
                         else
                             break;
-                    string s = "";
-                    for (int i = 0; i < c; i++)
-                        s += " ";
+                    if (c == 0)
+                        return;
+
+                    var s = new String(' ', c);
                     app.Text = app.Text.Insert(app.SelectionStart, "\n" + s);
                     app.SelectionStart = remember_pos + c + 1;
                     e.Handled = true;

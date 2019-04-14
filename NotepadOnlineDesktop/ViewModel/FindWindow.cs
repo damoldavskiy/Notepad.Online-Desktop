@@ -9,10 +9,11 @@ namespace NotepadOnlineDesktop.ViewModel
         public event PropertyChangedEventHandler PropertyChanged;
         public event FindHandler RequestFind;
 
-        private string word;
-        private bool ignoreCase;
-        private bool upDirection;
-        private bool downDirection;
+        string word;
+        bool ignoreCase;
+        bool regex;
+        bool upDirection;
+        bool downDirection;
 
         public string Word
         {
@@ -23,7 +24,7 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 word = value;
-                OnPropertyChanged("Word");
+                OnPropertyChanged(nameof(Word));
             }
         }
 
@@ -36,7 +37,20 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 ignoreCase = value;
-                OnPropertyChanged("IgnoreCase");
+                OnPropertyChanged(nameof(IgnoreCase));
+            }
+        }
+
+        public bool Regex
+        {
+            get
+            {
+                return regex;
+            }
+            set
+            {
+                regex = value;
+                OnPropertyChanged(nameof(Regex));
             }
         }
 
@@ -49,7 +63,7 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 upDirection = value;
-                OnPropertyChanged("UpDirection");
+                OnPropertyChanged(nameof(UpDirection));
             }
         }
 
@@ -62,7 +76,7 @@ namespace NotepadOnlineDesktop.ViewModel
             set
             {
                 downDirection = value;
-                OnPropertyChanged("DownDirection");
+                OnPropertyChanged(nameof(DownDirection));
             }
         }
 
@@ -71,7 +85,7 @@ namespace NotepadOnlineDesktop.ViewModel
             get
             {
                 return new Model.ActionCommand(sender =>
-                    OnRequestFind(new Model.FindEventArgs(Word ?? "", IgnoreCase, UpDirection, DownDirection))
+                    OnRequestFind(new Model.FindEventArgs(Word ?? "", IgnoreCase, Regex, UpDirection, DownDirection))
                 );
             }
         }

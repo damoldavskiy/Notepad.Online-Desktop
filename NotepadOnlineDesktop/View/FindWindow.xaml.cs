@@ -9,7 +9,7 @@ namespace NotepadOnlineDesktop.View
         public FindWindow()
         {
             InitializeComponent();
-
+            text.Focus();
             DataContext = ViewModel = new ViewModel.FindWindow();
         }
     }

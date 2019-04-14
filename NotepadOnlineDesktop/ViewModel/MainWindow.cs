@@ -274,7 +274,11 @@ namespace NotepadOnlineDesktop.ViewModel
                     if (e.Key == Key.Delete)
                         e.Handled = instance.RaiseOnInput(SpecKey.Delete);
                 };
-                text.PreviewTextInput += (s, e) => { if (e.Text.Length > 0) e.Handled = instance.RaiseOnInput(e.Text[0]); };
+                text.PreviewTextInput += (s, e) =>
+                {
+                    if (e.Text.Length > 0)
+                        e.Handled = instance.RaiseOnInput(e.Text[0]);
+                };
 
                 try
                 {
@@ -353,24 +357,45 @@ namespace NotepadOnlineDesktop.ViewModel
             };
             findWindow.ViewModel.RequestFind += (s, args) =>
             {
-                int index;
-                var comp = args.IgnoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture;
-                
-                if (args.DownDirection)
-                    index = text.Text.IndexOf(args.Word, text.CaretIndex + text.SelectionLength, comp);
-                else
-                    index = text.Text.LastIndexOf(args.Word, text.CaretIndex, comp);
+                //int index;
+                //var comp = args.IgnoreCase ? StringComparison.CurrentCultureIgnoreCase : StringComparison.CurrentCulture;
 
-                if (index == -1)
+                //if (args.DownDirection)
+                //    index = text.Text.IndexOf(args.Word, text.CaretIndex + text.SelectionLength, comp);
+                //else
+                //    index = text.Text.LastIndexOf(args.Word, text.CaretIndex, comp);
+
+                string block;
+
+                if (args.DownDirection)
+                    block = text.Text.Substring(text.SelectionStart + text.SelectionLength);
+                else
+                    block = text.Text.Substring(0, text.SelectionStart);
+                
+                var word = args.Regex ? args.Word : Regex.Escape(args.Word);
+
+                var options = RegexOptions.Multiline;
+
+                if (args.IgnoreCase)
+                    options |= RegexOptions.IgnoreCase;
+                if (args.UpDirection)
+                    options |= RegexOptions.RightToLeft;
+
+                var match = Regex.Match(block, word, options);
+
+                if (!match.Success)
                 {
                     MessageBox.Show("No matches", "Completed", MessageBoxButton.OK, MessageBoxImage.Information);
                     text.Focus();
                     return;
                 }
 
-                text.CaretIndex = index + args.Word.Length;
+                var index = match.Index;
+                if (args.DownDirection)
+                    index += text.SelectionStart + text.SelectionLength;
+                //MessageBox.Show(index.ToString());
                 text.Focus();
-                text.Select(index, args.Word.Length);
+                text.Select(index, match.Length);
             };
             findWindow.Show();
         }

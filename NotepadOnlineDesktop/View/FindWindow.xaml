@@ -18,8 +18,11 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBox Margin="5" Grid.ColumnSpan="3" Text="{Binding Word}"/>
-        <CheckBox Margin="5,5,0,0" Grid.Row="1" IsChecked="{Binding IgnoreCase}">Ignore case</CheckBox>
+        <TextBox x:Name="text" Margin="5" Grid.ColumnSpan="3" Text="{Binding Word}"/>
+        <StackPanel Margin="5" Grid.Row="1">
+            <CheckBox IsChecked="{Binding IgnoreCase}">Ignore case</CheckBox>
+            <CheckBox Margin="0,5,0,0" IsChecked="{Binding Regex}">Regex</CheckBox>
+        </StackPanel>
         <StackPanel Grid.Column="1" Grid.Row="1">
             <Label>Direction:</Label>
             <RadioButton GroupName="Direction" Margin="10,0,0,0" IsChecked="{Binding UpDirection}">Up</RadioButton>
