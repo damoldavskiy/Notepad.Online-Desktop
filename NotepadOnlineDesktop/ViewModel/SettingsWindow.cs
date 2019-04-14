@@ -125,13 +125,15 @@ namespace NotepadOnlineDesktop.ViewModel
                 var box = (TextBox)s;
                 if (!int.TryParse(box.Text, out value) || value < 1 || value > 1000)
                 {
-                    box.Background = Brushes.OrangeRed;
+                    box.Background = (Brush)new BrushConverter().ConvertFrom("#E23D3D");
+                    box.CaretBrush = Brushes.White;
                     box.Foreground = Brushes.White;
                     return;
                 }
                 else
                 {
                     box.Background = Brushes.White;
+                    box.CaretBrush = Brushes.Black;
                     box.Foreground = Brushes.Black;
                 }
 
