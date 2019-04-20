@@ -135,7 +135,7 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             get
             {
-                return "Notepad.Online" + (Saved ? "" : " (Edited)") + (Name == null ? "" : " | " + Name);
+                return "Notepad.Online" + (Saved ? "" : " (" + Properties.Resources.Edited + ")") + (Name == null ? "" : " | " + Name);
             }
         }
 
@@ -149,8 +149,8 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 Properties.Settings.Default.textwrap = value;
                 Properties.Settings.Default.Save();
-                OnPropertyChanged("TextWrap");
-                OnPropertyChanged("WrappingType");
+                OnPropertyChanged(nameof(TextWrap));
+                OnPropertyChanged(nameof(WrappingType));
             }
         }
 
@@ -215,7 +215,7 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 return new Model.ActionCommand(sender =>
                 {
-                    MessageBox.Show("Notepad.Online Desktop\nVersion: 1.0\n\nHave a question? Contact with developer: party_50@mail.ru", "About", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.Info, Properties.Resources.About, MessageBoxButton.OK, MessageBoxImage.Information);
                 });
             }
         }
@@ -239,7 +239,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 }
                 catch (Exception e)
                 {
-                    MessageBox.Show("Unable to load file: " + e.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(Properties.Resources.UnableToLoadFile + ": " + e.Message, Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
             if (Properties.Settings.Default.enableExtensions)
@@ -284,14 +284,15 @@ namespace NotepadOnlineDesktop.ViewModel
                     if (e.Text.Length > 0)
                         e.Handled = instance.RaiseOnInput(e.Text[0]);
                 };
-
+                
                 try
                 {
                     #if DEBUG
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
-                    #else
+                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
+#else
                     Model.ExtensionManager.Load(@"Extensions\");
-                    #endif
+#endif
                     Model.ExtensionManager.Initialize(instance, extensionsParent);
                 }
                 catch (DirectoryNotFoundException)
@@ -382,7 +383,7 @@ namespace NotepadOnlineDesktop.ViewModel
 
                 if (!match.Success)
                 {
-                    MessageBox.Show("No matches", "Completed", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Properties.Resources.NoMatches, Properties.Resources.Completed, MessageBoxButton.OK, MessageBoxImage.Information);
                     text.Focus();
                     return;
                 }
@@ -418,7 +419,7 @@ namespace NotepadOnlineDesktop.ViewModel
             if (Saved)
                 return true;
 
-            var result = MessageBox.Show("Do you want to save the text?", "Closing current text", MessageBoxButton.YesNoCancel);
+            var result = MessageBox.Show(Properties.Resources.SaveResponse, Properties.Resources.ClosingText, MessageBoxButton.YesNoCancel);
 
             switch (result)
             {
@@ -443,7 +444,7 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             var dialog = new OpenFileDialog
             {
-                Filter = "Text file (*.txt)|*.txt",
+                Filter = Properties.Resources.TextFile + " (*.txt)|*.txt",
                 InitialDirectory = defaultPath
             };
 
@@ -454,7 +455,7 @@ namespace NotepadOnlineDesktop.ViewModel
         {
             var dialog = new SaveFileDialog
             {
-                Filter = "Text file (*.txt)|*.txt",
+                Filter = Properties.Resources.TextFile + " (*.txt)|*.txt",
                 InitialDirectory = defaultPath
             };
 

@@ -1,10 +1,11 @@
-﻿using System;
+﻿using NotepadOnlineDesktop.Properties;
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows.Controls;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
-using System.Linq;
 
 namespace NotepadOnlineDesktop.ViewModel
 {
@@ -17,11 +18,11 @@ namespace NotepadOnlineDesktop.ViewModel
         Model.SettingsPageItem selectedPage;
         bool restartNotify;
 
-        Properties.Settings Settings
+        Settings Settings
         {
             get
             {
-                return NotepadOnlineDesktop.Properties.Settings.Default;
+                return Settings.Default;
             }
         }
 
@@ -83,7 +84,10 @@ namespace NotepadOnlineDesktop.ViewModel
                 {
                     Settings.Save();
                     SettingsUpdated?.Invoke(this, EventArgs.Empty);
-                    MessageBox.Show("Settings saved." + (restartNotify ? " Changes will be accepted after restart" : ""), "Settings", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show(Resources.SettingsSaved + (restartNotify ? Resources.AcceptedAfterRestart : ""),
+                        Resources.Settings,
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
                 });
             }
         }
@@ -96,8 +100,8 @@ namespace NotepadOnlineDesktop.ViewModel
                 SelectedIndex = Settings.theme == "light" ? 0 : 1,
                 ItemsSource = new[]
                 {
-                        new TextBlock() { Text = "Light" },
-                        new TextBlock() { Text = "Dark" }
+                        new TextBlock() { Text = Resources.Light },
+                        new TextBlock() { Text = Resources.Dark }
                 }
             };
             colorThemeComboBox.SelectionChanged += (s, e) =>
@@ -186,46 +190,46 @@ namespace NotepadOnlineDesktop.ViewModel
                 {
                     new Model.SettingsPageItem()
                     {
-                        Header = "General",
+                        Header = Resources.General,
                         Properties = new List<Model.SettingsPropertyItem>()
                         {
                             new Model.SettingsPropertyItem()
                             {
-                                Header = "Color theme",
+                                Header = Resources.ColorTheme,
                                 Control = colorThemeComboBox
                             },
                             new Model.SettingsPropertyItem()
                             {
-                                Header = "Ask on exit",
+                                Header = Resources.AskOnExit,
                                 Control = askSaveCheckBox
                             }
                         }
                     },
                     new Model.SettingsPageItem()
                     {
-                        Header = "Editor",
+                        Header = Resources.Editor,
                         Properties = new List<Model.SettingsPropertyItem>()
                         {
                             new Model.SettingsPropertyItem()
                             {
-                                Header = "Font size",
+                                Header = Resources.FontSize,
                                 Control = fontSize
                             },
                             new Model.SettingsPropertyItem()
                             {
-                                Header = "Font family",
+                                Header = Resources.FontFamily,
                                 Control = fontFamily
                             }
                         }
                     },
                     new Model.SettingsPageItem()
                     {
-                        Header="Extensions",
+                        Header = Resources.Extensions,
                         Properties = new List<Model.SettingsPropertyItem>()
                         {
                             new Model.SettingsPropertyItem()
                             {
-                                Header = "Enable extension manager",
+                                Header = Resources.EnableExtensions,
                                 Control = enableExtensions
                             }
                         }

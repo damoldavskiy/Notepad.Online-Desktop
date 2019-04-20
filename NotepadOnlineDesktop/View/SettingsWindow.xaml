@@ -1,12 +1,12 @@
 ﻿<Window x:Class="NotepadOnlineDesktop.View.SettingsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:props="clr-namespace:NotepadOnlineDesktop.Properties"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:NotepadOnlineDesktop.View"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         mc:Ignorable="d"
-        Title="Settings" Height="250" Width="600"
+        Title="{x:Static props:Resources.Settings}" Height="250" Width="600"
         ResizeMode="NoResize">
     <Grid>
         <Grid.ColumnDefinitions>
@@ -42,6 +42,6 @@
             </ItemsControl.ItemTemplate>
         </ItemsControl>
 
-        <Button Command="{Binding Save}" Content="Save" Margin="10" Height="20" Width="60" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
+        <Button Command="{Binding Save}" Content="{x:Static props:Resources.Save}" Margin="10" Height="20" Width="80" Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right"/>
     </Grid>
 </Window>

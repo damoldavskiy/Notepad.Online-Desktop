@@ -1,5 +1,6 @@
 ﻿<Window x:Class="NotepadOnlineDesktop.View.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:props="clr-namespace:NotepadOnlineDesktop.Properties"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,35 +8,35 @@
         Title="{Binding WindowTitle}" Height="450" Width="800">
     <DockPanel>
         <Menu DockPanel.Dock="Top" Padding="2" Background="#283593" Foreground="White">
-            <MenuItem Header="File" Template="{DynamicResource MenuItemTemplate}">
-                <MenuItem Header="New" Command="New"/>
-                <MenuItem Header="Open" Command="Open"/>
+            <MenuItem Header="{x:Static props:Resources.File}" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="{x:Static props:Resources.New}" Command="New"/>
+                <MenuItem Header="{x:Static props:Resources.Open}" Command="Open"/>
                 <Separator Background="#5F5FC4"/>
-                <MenuItem Header="Save" Command="Save"/>
-                <MenuItem Header="Save as" Command="SaveAs"/>
+                <MenuItem Header="{x:Static props:Resources.Save}" Command="Save"/>
+                <MenuItem Header="{x:Static props:Resources.SaveAs}" Command="SaveAs"/>
                 <Separator Background="#5F5FC4"/>
-                <MenuItem Header="Exit" Command="Close"/>
+                <MenuItem Header="{x:Static props:Resources.Exit}" Command="Close"/>
             </MenuItem>
-            <MenuItem Header="Edit" Template="{DynamicResource MenuItemTemplate}">
-                <MenuItem Header="Undo" Command="Undo"/>
-                <MenuItem Header="Redo" Command="Redo"/>
+            <MenuItem Header="{x:Static props:Resources.Edit}" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="{x:Static props:Resources.Undo}" Command="Undo"/>
+                <MenuItem Header="{x:Static props:Resources.Redo}" Command="Redo"/>
                 <Separator Background="#5F5FC4"/>
-                <MenuItem Header="Cut" Command="Cut"/>
-                <MenuItem Header="Copy" Command="Copy"/>
-                <MenuItem Header="Paste" Command="Paste"/>
+                <MenuItem Header="{x:Static props:Resources.Cut}" Command="Cut"/>
+                <MenuItem Header="{x:Static props:Resources.Copy}" Command="Copy"/>
+                <MenuItem Header="{x:Static props:Resources.Paste}" Command="Paste"/>
                 <Separator Background="#5F5FC4"/>
-                <MenuItem Header="Find" Command="Find"/>
-                <MenuItem Header="Replace" Command="Replace"/>
+                <MenuItem Header="{x:Static props:Resources.Find}" Command="Find"/>
+                <MenuItem Header="{x:Static props:Resources.Replace}" Command="Replace"/>
             </MenuItem>
-            <MenuItem Header="View" Template="{DynamicResource MenuItemTemplate}">
-                <MenuItem Header="Text wrapping" IsCheckable="True" IsChecked="{Binding TextWrap}"/>
-                <MenuItem Header="Settings" Command="{Binding Settings}"/>
+            <MenuItem Header="{x:Static props:Resources.View}" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="{x:Static props:Resources.TextWrap}" IsCheckable="True" IsChecked="{Binding TextWrap}"/>
+                <MenuItem Header="{x:Static props:Resources.Settings}" Command="{Binding Settings}"/>
             </MenuItem>
-            <MenuItem x:Name="extensions" Header="Extensions" Template="{DynamicResource MenuItemTemplate}">
-                <MenuItem Header="Manager" Command="{Binding Manager}"/>
+            <MenuItem x:Name="extensions" Header="{x:Static props:Resources.Extensions}" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="{x:Static props:Resources.Manager}" Command="{Binding Manager}"/>
             </MenuItem>
-            <MenuItem Header="Help" Template="{DynamicResource MenuItemTemplate}">
-                <MenuItem Header="About" Command="{Binding About}"/>
+            <MenuItem Header="{x:Static props:Resources.Help}" Template="{DynamicResource MenuItemTemplate}">
+                <MenuItem Header="{x:Static props:Resources.About}" Command="{Binding About}"/>
             </MenuItem>
         </Menu>
         <TextBox x:Name="text" AcceptsTab="True" AcceptsReturn="True" TextWrapping="{Binding WrappingType}" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Style="{DynamicResource MainTextBox}"/>
