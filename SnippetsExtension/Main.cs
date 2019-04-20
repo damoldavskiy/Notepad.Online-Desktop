@@ -37,6 +37,7 @@ namespace SnippetsExtension
         string middleValue;
         int currentPos;
         int currentLength;
+        int padding;
 
         public List<MenuItem> Menu
         {
@@ -217,6 +218,7 @@ namespace SnippetsExtension
                             continue;
 
                         var value = snippet.Value;
+                        
                         if (snippet.ContainsPythonCode)
                         {
                             scope.SetVariable("word", match.Value);
@@ -257,10 +259,17 @@ namespace SnippetsExtension
                     }
                     else if (_pos >= snippet.Template.Length && _text.Substring(_pos - snippet.Template.Length, snippet.Template.Length) == snippet.Template)
                     {
-                        if (snippet.BeginOnly && pos >= snippet.Template.Length && text[pos - snippet.Template.Length] != '\n')
-                            continue;
-
                         var value = snippet.Value;
+
+                        if (pos >= snippet.Template.Length)
+                        {
+                            var subtext = text.Substring(0, pos - snippet.Template.Length + 1);
+                            var textForBeginCheck = subtext.TrimEnd(' ');
+                            if (snippet.BeginOnly && !(textForBeginCheck.Length == 0 || textForBeginCheck.Last() == '\n'))
+                                continue;
+                            value = value.Replace("\n", "\n" + new string(' ', subtext.Length - textForBeginCheck.Length));
+
+                        }
 
                         if (snippet.ContainsPythonCode)
                         {

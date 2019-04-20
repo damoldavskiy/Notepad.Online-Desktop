@@ -126,7 +126,8 @@ namespace SnippetsExtension
             headers = headers.ToUpper();
 
             if (headers.Contains("B") && headers.Contains("R"))
-                template = "^" + template;
+                template = @"(?<=^\s*)" + template;
+                //template = "^" + template;
 
             if (headers.Contains("W"))
             {
