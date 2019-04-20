@@ -18,10 +18,10 @@ namespace CloudExtension
     [Export(typeof(IExtension))]
     public class Main : IExtension
     {
-        public string Name { get; } = "Cloud Database";
+        public string Name { get; } = Resources.Name;
         public string Version { get; } = "1.0";
         public string Author { get; } = "DMSoft";
-        public string Description { get; } = "Extension allows user to use Notepad.Online Cloud to keep files";
+        public string Description { get; } = Resources.Info;
 
         public List<MenuItem> Menu
         {
@@ -47,15 +47,15 @@ namespace CloudExtension
 
         public Main()
         {
-            saveInCloud = new MenuItem() { Header = "Save in cloud" };
+            saveInCloud = new MenuItem() { Header = Resources.SaveInCloud };
             saveInCloud.Click += SaveInCloud_Click;
-            delete = new MenuItem() { Header = "Delete file" };
+            delete = new MenuItem() { Header = Resources.DeleteFile };
             delete.Click += Delete_Click;
-            openFolder = new MenuItem() { Header = "Open cloud folder" };
+            openFolder = new MenuItem() { Header = Resources.OpenCloudFolder };
             openFolder.Click += OpenFolder_Click;
-            update = new MenuItem() { Header = "Update files" };
+            update = new MenuItem() { Header = Resources.UpdateFiles };
             update.Click += Update_Click;
-            properties = new MenuItem() { Header = "Properties" };
+            properties = new MenuItem() { Header = Resources.Properties };
             properties.Click += Properties_Click;
         }
 
@@ -75,7 +75,7 @@ namespace CloudExtension
             var result = await DataBase.Manager.LoginAsync(Settings.Default.email, Settings.Default.password, Settings.Default.token);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show("Log in failed. " + result.GetDescription(), "Cloud Extension");
+                MessageBox.Show(Resources.LogInFailed + ". " + result.GetDescription(), Resources.Name);
                 return;
             }
 
@@ -91,7 +91,7 @@ namespace CloudExtension
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
-                MessageBox.Show("Sign in firstly", "File not saved");
+                MessageBox.Show(Resources.SignInFirstly, Resources.FileNotSaved);
                 return;
             }
 
@@ -120,7 +120,7 @@ namespace CloudExtension
         {
             if (app.Name == null || !app.Name.StartsWith(Settings.Default.path) || !app.Name.EndsWith(".txt"))
             {
-                MessageBox.Show("Open file from Cloud folder to operate", "Illegal file");
+                MessageBox.Show(Resources.OpenFromCloudToOperate, Resources.IllegalFile);
                 return;
             }
             var name = app.Name.Substring(Settings.Default.path.Length);
@@ -128,11 +128,11 @@ namespace CloudExtension
             var result = DataBase.Manager.DelData(name);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"File not deleted. " + result.GetDescription(), "Deleting failed");
+                MessageBox.Show(Resources.FileNotDeleted + ". " + result.GetDescription(), Resources.DeletingFailed);
                 return;
             }
             File.Delete(app.Name);
-            MessageBox.Show("File deleted", "Success");
+            MessageBox.Show(Resources.FileDeleted, Resources.Success);
         }
 
         void OpenFolder_Click(object sender, RoutedEventArgs e)
@@ -144,18 +144,18 @@ namespace CloudExtension
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.Ready)
             {
-                MessageBox.Show("Sign in firstly", "Updating failed");
+                MessageBox.Show(Resources.SignInFirstly, Resources.UpdatingFailed);
                 return;
             }
             
             var result = DataBase.Manager.GetNames();
 
             if (result.Item1 != DataBase.ReturnCode.Success)
-                MessageBox.Show($"Files not updated. " + result.Item1.GetDescription(), "Updating failed");
+                MessageBox.Show(Resources.FilesNotUpdated + ". " + result.Item1.GetDescription(), Resources.UpdatingFailed);
 
             await UpdateFolderAsync();
 
-            MessageBox.Show("All files are now updated", "Updating successful");
+            MessageBox.Show(Resources.FilesUpdated, Resources.Success);
         }
 
         void Properties_Click(object sender, RoutedEventArgs e)
@@ -179,24 +179,24 @@ namespace CloudExtension
 
         async Task SaveToCloudAsync(string name, string text)
         {
-            var result = await DataBase.Manager.AddDataAsync(name, "Desktop Extension", app.Text);
+            var result = await DataBase.Manager.AddDataAsync(name, Resources.Name, app.Text);
 
             if (result == DataBase.ReturnCode.Success)
-                MessageBox.Show("The file now in the cloud: " + name, "Saving successful");
+                MessageBox.Show(Resources.FileInCloud + ": " + name, Resources.Success);
             else if (result == DataBase.ReturnCode.DataAlreadyExists)
             {
-                if (MessageBox.Show($"Do you want to replace file \"{name}\"?", "Replacing file", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(Resources.DoYouWantToReplace + " \"{name}\"?", Resources.ReplacingFile, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
-                    result = await DataBase.Manager.EditDescriptionAsync(name, "Desktop Extension");
+                    result = await DataBase.Manager.EditDescriptionAsync(name, Resources.Name);
                     if (result == DataBase.ReturnCode.Success)
                         result = await DataBase.Manager.EditTextAsync(name, app.Text);
 
                     if (result != DataBase.ReturnCode.Success)
-                        MessageBox.Show($"File not saved. " + result.GetDescription(), "Saving failed");
+                        MessageBox.Show(Resources.FileNotSaved + ". " + result.GetDescription(), Resources.FileNotSaved);
                 }
             }
             else
-                MessageBox.Show($"File not saved. " + result.GetDescription(), "Saving failed");
+                MessageBox.Show(Resources.FileNotSaved + ". " + result.GetDescription(), Resources.FileNotSaved);
         }
 
         private void ClearFolder()

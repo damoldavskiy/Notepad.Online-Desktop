@@ -118,159 +118,159 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Accept" xml:space="preserve">
-    <value>Accept</value>
+    <value>Применить</value>
   </data>
   <data name="Account" xml:space="preserve">
-    <value>Account</value>
+    <value>Аккаунт</value>
   </data>
   <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
+    <value>Отменить</value>
   </data>
   <data name="CloudProperties" xml:space="preserve">
-    <value>Cloud DataBase Properties</value>
+    <value>Параметры</value>
   </data>
   <data name="CodeMessage" xml:space="preserve">
-    <value>You'll receive confirmation code in several minutes. Type one in the box below</value>
+    <value>В течение нескольких минут вы получите код подтверждения регистрации. Ввелите его в соответствующее поле.</value>
   </data>
   <data name="Confirm" xml:space="preserve">
-    <value>Confirm</value>
+    <value>Подтвердить</value>
   </data>
   <data name="ConfirmationFailed" xml:space="preserve">
-    <value>Confirmation failed</value>
+    <value>Во время подтверждения произошла ошибка</value>
   </data>
   <data name="ConfirmCode" xml:space="preserve">
-    <value>Confirm code</value>
+    <value>Код подтверждения</value>
   </data>
   <data name="ConfirmPassword" xml:space="preserve">
-    <value>Confirm password</value>
+    <value>Пароль (повт.)</value>
   </data>
   <data name="DeleteFile" xml:space="preserve">
-    <value>Delete file</value>
+    <value>Удалить файл</value>
   </data>
   <data name="DeletingFailed" xml:space="preserve">
-    <value>Deleting failed</value>
+    <value>Ошибка во время удаления</value>
   </data>
   <data name="DirectoryDoesntExist" xml:space="preserve">
-    <value>Directory doesn't exist</value>
+    <value>Директория не существует</value>
   </data>
   <data name="DoYouWantToReplace" xml:space="preserve">
-    <value>Do you want to replace file</value>
+    <value>Вы действительно хотите перезаписать файл</value>
   </data>
   <data name="Email" xml:space="preserve">
     <value>E-mail</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="FileDeleted" xml:space="preserve">
-    <value>File deleted</value>
+    <value>Файл удален</value>
   </data>
   <data name="FileInCloud" xml:space="preserve">
-    <value>The file now in the cloud</value>
+    <value>Файл сохранен в облаке</value>
   </data>
   <data name="FileNotDeleted" xml:space="preserve">
-    <value>File not deleted</value>
+    <value>Файл не удален</value>
   </data>
   <data name="FileNotSaved" xml:space="preserve">
-    <value>File not saved</value>
+    <value>Файл не сохранен</value>
   </data>
   <data name="FilesNotUpdated" xml:space="preserve">
-    <value>Files not updated</value>
+    <value>Файлы не обновлены</value>
   </data>
   <data name="FilesUpdated" xml:space="preserve">
-    <value>All files are now updated</value>
+    <value>Все файлы обновлены</value>
   </data>
   <data name="IllegalFile" xml:space="preserve">
-    <value>Illegal file</value>
+    <value>Неверный файл</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Extension allows user to use Notepad.Online Cloud to keep files</value>
+    <value>Расширение позволяет использовать базу данных Notepad.Online для хранения файлов</value>
   </data>
   <data name="InputName" xml:space="preserve">
-    <value>Input name</value>
+    <value>Введите название</value>
   </data>
   <data name="LocalSettings" xml:space="preserve">
-    <value>Local settings</value>
+    <value>Локальные настройки</value>
   </data>
   <data name="Login" xml:space="preserve">
-    <value>Login</value>
+    <value>Вход</value>
   </data>
   <data name="LoginError" xml:space="preserve">
-    <value>Error occured while signing in</value>
+    <value>Во время входа произошла ошибка</value>
   </data>
   <data name="LogInFailed" xml:space="preserve">
-    <value>Log in failed</value>
+    <value>Во время входа произошла ошибка</value>
   </data>
   <data name="Log_in" xml:space="preserve">
-    <value>Log in</value>
+    <value>Войти</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Cloud Database</value>
+    <value>Облачное хранилище</value>
   </data>
   <data name="NewAccount" xml:space="preserve">
-    <value>New account</value>
+    <value>Новый аккаунт</value>
   </data>
   <data name="NewFile" xml:space="preserve">
-    <value>New file</value>
+    <value>Новый файл</value>
   </data>
   <data name="NotSigned" xml:space="preserve">
-    <value>Not signed</value>
+    <value>Вход не выполнен</value>
   </data>
   <data name="OpenCloudFolder" xml:space="preserve">
-    <value>Open cloud folder</value>
+    <value>Открыть папку облака</value>
   </data>
   <data name="OpenFromCloudToOperate" xml:space="preserve">
-    <value>Open file from Cloud folder to operate</value>
+    <value>Откройте файл из папки облака для работы с ним</value>
   </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
+    <value>Пароль</value>
   </data>
   <data name="PasswordsDontMatch" xml:space="preserve">
-    <value>Passwords don't match</value>
+    <value>Пароли не совпадают</value>
   </data>
   <data name="PathToCloudFolder" xml:space="preserve">
-    <value>Path to cloud folder</value>
+    <value>Директория папки облака</value>
   </data>
   <data name="PerformRegistration" xml:space="preserve">
-    <value>Perform registration firstly</value>
+    <value>Сначала пройдите регистрацию</value>
   </data>
   <data name="Properties" xml:space="preserve">
-    <value>Properties</value>
+    <value>Параметры</value>
   </data>
   <data name="Register" xml:space="preserve">
-    <value>Register</value>
+    <value>Регистрация</value>
   </data>
   <data name="RegistrationCompleted" xml:space="preserve">
-    <value>Registration completed</value>
+    <value>Регистрация выполнена</value>
   </data>
   <data name="RegistrationFailed" xml:space="preserve">
-    <value>Registration failed</value>
+    <value>Во время регистрации произошла ошибка</value>
   </data>
   <data name="ReplacingFile" xml:space="preserve">
-    <value>Replacing file</value>
+    <value>Перезапись файла</value>
   </data>
   <data name="SaveInCloud" xml:space="preserve">
-    <value>Save in cloud</value>
+    <value>Сохранить в облаке</value>
   </data>
   <data name="SignInFirstly" xml:space="preserve">
-    <value>Sign in firstly</value>
+    <value>Необходимо войти в аккаунт</value>
   </data>
   <data name="Sign_up" xml:space="preserve">
-    <value>Sign up</value>
+    <value>Зарегистрироваться</value>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>Применить</value>
   </data>
   <data name="Success" xml:space="preserve">
-    <value>Success</value>
+    <value>Успех</value>
   </data>
   <data name="UpdateFiles" xml:space="preserve">
-    <value>Update files</value>
+    <value>Обновить файлы</value>
   </data>
   <data name="UpdatingFailed" xml:space="preserve">
-    <value>Updating failed</value>
+    <value>Ошибка во время обновления</value>
   </data>
   <data name="YouAreSigned" xml:space="preserve">
-    <value>You are signed in</value>
+    <value>Вход выполнен</value>
   </data>
 </root>

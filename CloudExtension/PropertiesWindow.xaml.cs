@@ -31,7 +31,7 @@ namespace CloudExtension
             var result = await DataBase.Manager.LoginAsync(log, pass);
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show("Error occured while authorizing. " + result.GetDescription(), "Not authorized");
+                MessageBox.Show(Properties.Resources.LoginError + ". " + result.GetDescription(), Properties.Resources.NotSigned);
                 return;
             }
 
@@ -41,7 +41,7 @@ namespace CloudExtension
             properties.token = DataBase.Manager.Token;
             properties.Save();
 
-            MessageBox.Show("You are signed in", "Success");
+            MessageBox.Show(Properties.Resources.YouAreSigned, Properties.Resources.Success);
         }
 
         void Register_Click(object sender, RoutedEventArgs e)
@@ -57,7 +57,7 @@ namespace CloudExtension
             var info = new DirectoryInfo(path.Text.Trim() + "\\");
             if (!info.Exists)
             {
-                MessageBox.Show("Directory doesn't exist", "Error");
+                MessageBox.Show(Properties.Resources.DirectoryDoesntExist, Properties.Resources.Error);
                 return;
             }
             

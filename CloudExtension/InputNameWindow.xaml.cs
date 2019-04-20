@@ -29,7 +29,7 @@ namespace CloudExtension
             InitializeComponent();
             DataContext = this;
 
-            Text = "New file";
+            Text = Properties.Resources.NewFile;
         }
 
         public void OnPropertyChanged(string name)

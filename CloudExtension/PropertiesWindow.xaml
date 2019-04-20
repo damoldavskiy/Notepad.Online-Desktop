@@ -1,14 +1,14 @@
 ﻿<Window x:Class="CloudExtension.PropertiesWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:props="clr-namespace:CloudExtension.Properties"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:CloudExtension"
         mc:Ignorable="d"
-        Title="Cloud DataBase Properties" Height="380" Width="400"
+        Title="{x:Static props:Resources.CloudProperties}" Height="380" Width="400"
         ResizeMode="CanMinimize">
     <StackPanel>
-        <GroupBox Header="Account" Margin="20,20,20,0" Padding="10">
+        <GroupBox Header="{x:Static props:Resources.Account}" Margin="20,20,20,0" Padding="10">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -21,24 +21,24 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
 
-                <Label Grid.ColumnSpan="2">Login</Label>
-                <Label Margin="5" Grid.Row="1">E-mail</Label>
+                <Label Grid.ColumnSpan="2" Content="{x:Static props:Resources.Login}"/>
+                <Label Margin="5" Grid.Row="1" Content="{x:Static props:Resources.Email}"/>
                 <TextBox x:Name="email" Margin="5" Grid.Row="1" Grid.Column="1"/>
-                <Label Margin="5" Grid.Row="2">Password</Label>
+                <Label Margin="5" Grid.Row="2" Content="{x:Static props:Resources.Password}"/>
                 <PasswordBox x:Name="password" Margin="5" Grid.Row="2" Grid.Column="1"/>
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button Click="Login_Click" Margin="5,5,5,0" Height="25" Width="100" >Log in</Button>
-                    <Button Click="Register_Click" Margin="5,5,5,0" Height="25" Width="100">Register</Button>
+                    <Button Click="Login_Click" Margin="5,5,5,0" Height="25" Width="100" Content="{x:Static props:Resources.Log_in}"/>
+                    <Button Click="Register_Click" Margin="5,5,5,0" Height="25" Width="100" Content="{x:Static props:Resources.Register}"/>
                 </StackPanel>
             </Grid>
         </GroupBox>
-        <GroupBox Header="Local settings" Margin="20" Padding="10">
+        <GroupBox Header="{x:Static props:Resources.LocalSettings}" Margin="20" Padding="10">
             <StackPanel>
                 <DockPanel>
-                    <Label Margin="0,5,5,5">Path to cloud folder</Label>
+                    <Label Margin="0,5,5,5" Content="{x:Static props:Resources.PathToCloudFolder}"/>
                     <TextBox x:Name="path" Margin="0,5,5,5" TextChanged="Local_Changed"/>
                 </DockPanel>
-                <Button x:Name="accept" Click="Accept_Click" Margin="5" Height="25" Width="100">Accept</Button>
+                <Button x:Name="accept" Click="Accept_Click" Margin="5" Height="25" Width="100" Content="{x:Static props:Resources.Accept}"/>
             </StackPanel>
         </GroupBox>
     </StackPanel>

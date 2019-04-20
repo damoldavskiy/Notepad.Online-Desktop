@@ -15,7 +15,7 @@ namespace CloudExtension
         {
             if (password.Password != conf_password.Password)
             {
-                MessageBox.Show("Passwords don't match");
+                MessageBox.Show(Properties.Resources.PasswordsDontMatch);
                 return;
             }
 
@@ -23,18 +23,18 @@ namespace CloudExtension
 
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"Registration failed. {result.GetDescription()}", "Error");
+                MessageBox.Show(Properties.Resources.RegistrationFailed + ". " + result.GetDescription(), Properties.Resources.Error);
                 return;
             }
 
-            MessageBox.Show("You'll receive confirmation code in several minutes. Type one in the box below", "Success");
+            MessageBox.Show(Properties.Resources.CodeMessage, Properties.Resources.Success);
         }
 
         void Confirm_Click(object sender, RoutedEventArgs e)
         {
             if (DataBase.Manager.Status != DataBase.ManagerStatus.RegistrationConfirmation)
             {
-                MessageBox.Show("Perform registration firstly");
+                MessageBox.Show(Properties.Resources.PerformRegistration);
                 return;
             }
 
@@ -42,11 +42,11 @@ namespace CloudExtension
 
             if (result != DataBase.ReturnCode.Success)
             {
-                MessageBox.Show($"Confirmation failed. {result.GetDescription()}", "Error");
+                MessageBox.Show(Properties.Resources.ConfirmationFailed + ". " + result.GetDescription(), Properties.Resources.Error);
                 return;
             }
 
-            MessageBox.Show("Registration completed", "Success");
+            MessageBox.Show(Properties.Resources.RegistrationCompleted, Properties.Resources.Success);
             Close();
         }
     }
