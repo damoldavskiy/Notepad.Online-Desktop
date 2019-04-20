@@ -18,13 +18,13 @@ namespace SnippetsExtension
     [Export(typeof(IExtension))]
     class Main : IExtension
     {
-        public string Name => "Snippets";
+        public string Name => Properties.Resources.Name;
 
         public string Version => "1.0";
 
         public string Author => "DMSoft";
 
-        public string Description => "Snippets allows user to use fast replace strings and other IDE tools";
+        public string Description => Properties.Resources.Info;
 
         readonly string configPath = AppDomain.CurrentDomain.BaseDirectory;
         Snippet[] snippets;
@@ -55,7 +55,7 @@ namespace SnippetsExtension
 
         public Main()
         {
-            properties = new MenuItem() { Header = "Properties" };
+            properties = new MenuItem() { Header = Properties.Resources.Properties };
             properties.Click += Properties_Click;
 
             snippets = Importer.LoadSnippets(configPath + "\\Config\\Snippets.ini");

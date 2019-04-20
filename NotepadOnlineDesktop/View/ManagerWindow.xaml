@@ -36,7 +36,23 @@
                             <Label Content="{x:Static props:Resources.ExtDescription}" Grid.Row="4"/>
 
                             <Label Content="{Binding Name}" Grid.Column="1"/>
-                            <Label Grid.Column="1" Grid.Row="1" Content="{Binding Status}"/>
+                            <Label Grid.Column="1" Grid.Row="1">
+                                <Label.Resources>
+                                    <Style TargetType="Label">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Status}" Value="Enabled">
+                                                <Setter Property="Content" Value="{x:Static props:Resources.Enabled}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Disabled">
+                                                <Setter Property="Content" Value="{x:Static props:Resources.Disabled}"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding Status}" Value="Loading">
+                                                <Setter Property="Content" Value="{x:Static props:Resources.Loading}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Label.Resources>
+                            </Label>
                             <Label Content="{Binding Version}" Grid.Column="1" Grid.Row="2"/>
                             <Label Content="{Binding Author}" Grid.Column="1" Grid.Row="3"/>
                             <Label Content="{Binding Description}" Grid.Column="1" Grid.Row="4"/>

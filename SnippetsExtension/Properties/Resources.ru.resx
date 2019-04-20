@@ -118,45 +118,45 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="BracketsFile" xml:space="preserve">
-    <value>Brackets file</value>
+    <value>Файл скобок</value>
   </data>
   <data name="BracketsNotFound" xml:space="preserve">
-    <value>Brackets file not found. Do you want to create one?</value>
+    <value>Файл скобок не найден. Создать его?</value>
   </data>
   <data name="EnableBrackets" xml:space="preserve">
-    <value>Enable bracket tools</value>
+    <value>Умные скобки</value>
   </data>
   <data name="EnableConvertation" xml:space="preserve">
-    <value>Convert tabs to spaces</value>
+    <value>Конвертация в пробелы</value>
   </data>
   <data name="EnableIdentation" xml:space="preserve">
-    <value>Auto-identation</value>
+    <value>Автоматические отступы</value>
   </data>
   <data name="EnableSnippets" xml:space="preserve">
-    <value>Enable snippets</value>
+    <value>Включить сниппеты</value>
   </data>
   <data name="Error" xml:space="preserve">
-    <value>Error</value>
+    <value>Ошибка</value>
   </data>
   <data name="Info" xml:space="preserve">
-    <value>Snippets allows user to use fast replace strings and other IDE tools</value>
+    <value>Сниппеты позволяют пользователю использовать быстрозаменяемые строки и другие инструменты среды разработки</value>
   </data>
   <data name="Name" xml:space="preserve">
-    <value>Snippets</value>
+    <value>Сниппеты</value>
   </data>
   <data name="OpenBracketsFile" xml:space="preserve">
-    <value>Open brackets file</value>
+    <value>Открыть файл скобок</value>
   </data>
   <data name="OpenSnippetsFile" xml:space="preserve">
-    <value>Open snippets file</value>
+    <value>Открыть файл сниппетов</value>
   </data>
   <data name="Properties" xml:space="preserve">
-    <value>Properties</value>
+    <value>Параметры</value>
   </data>
   <data name="SnippetsFile" xml:space="preserve">
-    <value>Snippets file</value>
+    <value>Файл сниппетов</value>
   </data>
   <data name="SnippetsNotFound" xml:space="preserve">
-    <value>Snippets file not found. Do you want to create one?</value>
+    <value>Файл сниппетов не найден. Создать его?</value>
   </data>
 </root>

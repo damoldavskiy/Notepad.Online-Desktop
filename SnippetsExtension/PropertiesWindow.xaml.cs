@@ -58,13 +58,13 @@ namespace SnippetsExtension
             }
             else
             {
-                var res = MessageBox.Show("Snippets file not found. Do you want to create one?", "Error", MessageBoxButton.YesNo);
+                var res = MessageBox.Show(Properties.Resources.SnippetsNotFound, Properties.Resources.Error, MessageBoxButton.YesNo);
                 if (res == MessageBoxResult.Yes)
                 {
                     Directory.CreateDirectory(configPath);
                     using (var stream = new StreamWriter(configPath + "Snippets.ini"))
                     {
-                        stream.Write("#\n# Snippets file\n#");
+                        stream.Write($"#\n# {Properties.Resources.SnippetsFile}\n#");
                     }
                     app.Open(configPath + "Snippets.ini");
                     Close();
@@ -81,13 +81,13 @@ namespace SnippetsExtension
             }
             else
             {
-                var res = MessageBox.Show("Brackets file not found. Do you want to create one?", "Error", MessageBoxButton.YesNo);
+                var res = MessageBox.Show(Properties.Resources.BracketsNotFound, Properties.Resources.Error, MessageBoxButton.YesNo);
                 if (res == MessageBoxResult.Yes)
                 {
                     Directory.CreateDirectory(configPath);
                     using (var stream = new StreamWriter(configPath + "Brackets.ini"))
                     {
-                        stream.Write("#\n# Brackets file\n#");
+                        stream.Write($"#\n# {Properties.Resources.BracketsFile}\n#");
                     }
                     app.Open(configPath + "Brackets.ini");
                     Close();

@@ -288,4 +288,13 @@ Have a question? Contact with developer: party_50@mail.ru</value>
   <data name="With" xml:space="preserve">
     <value>With</value>
   </data>
+  <data name="Disabled" xml:space="preserve">
+    <value>Disabled</value>
+  </data>
+  <data name="Enabled" xml:space="preserve">
+    <value>Enabled</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Loading</value>
+  </data>
 </root>
