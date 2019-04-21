@@ -185,7 +185,7 @@ namespace CloudExtension
                 MessageBox.Show(Resources.FileInCloud + ": " + name, Resources.Success);
             else if (result == DataBase.ReturnCode.DataAlreadyExists)
             {
-                if (MessageBox.Show(Resources.DoYouWantToReplace + " \"{name}\"?", Resources.ReplacingFile, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                if (MessageBox.Show(Resources.DoYouWantToReplace + $" \"{name}\"?", Resources.ReplacingFile, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     result = await DataBase.Manager.EditDescriptionAsync(name, Resources.Name);
                     if (result == DataBase.ReturnCode.Success)
