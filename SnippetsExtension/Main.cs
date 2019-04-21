@@ -37,7 +37,6 @@ namespace SnippetsExtension
         string middleValue;
         int currentPos;
         int currentLength;
-        int padding;
 
         public List<MenuItem> Menu
         {
