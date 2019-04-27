@@ -288,8 +288,8 @@ namespace NotepadOnlineDesktop.ViewModel
                 try
                 {
                     #if DEBUG
-                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
-                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
+                    Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\SnippetsExtension\bin\Debug\");
+                    //Model.ExtensionManager.Load(@"C:\Projects\NotepadOnlineDesktop\CloudExtension\bin\Debug\");
 #else
                     Model.ExtensionManager.Load(@"Extensions\");
 #endif

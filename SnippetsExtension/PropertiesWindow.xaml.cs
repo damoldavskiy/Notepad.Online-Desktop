@@ -3,6 +3,7 @@
 using System;
 using System.IO;
 using System.Windows;
+using System.Text;
 
 namespace SnippetsExtension
 {
@@ -62,7 +63,7 @@ namespace SnippetsExtension
                 if (res == MessageBoxResult.Yes)
                 {
                     Directory.CreateDirectory(configPath);
-                    using (var stream = new StreamWriter(configPath + "Snippets.ini"))
+                    using (var stream = new StreamWriter(configPath + "Snippets.ini", false, Encoding.UTF8))
                     {
                         stream.Write($"#\n# {Properties.Resources.SnippetsFile}\n#");
                     }
@@ -85,7 +86,7 @@ namespace SnippetsExtension
                 if (res == MessageBoxResult.Yes)
                 {
                     Directory.CreateDirectory(configPath);
-                    using (var stream = new StreamWriter(configPath + "Brackets.ini"))
+                    using (var stream = new StreamWriter(configPath + "Brackets.ini", false, Encoding.UTF8))
                     {
                         stream.Write($"#\n# {Properties.Resources.BracketsFile}\n#");
                     }

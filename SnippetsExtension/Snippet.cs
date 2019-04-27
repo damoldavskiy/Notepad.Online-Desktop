@@ -9,6 +9,7 @@ namespace SnippetsExtension
         public string Value { get; set; }
         public bool BeginOnly { get; set; }
         public bool UsesRegex { get; set; }
+        public bool SelectTrigger { get; set; }
         public bool ContainsPythonCode { get; set; }
         public string PythonCode { get; set; }
         public int PythonPosition { get; set; }

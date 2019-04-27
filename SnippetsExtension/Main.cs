@@ -78,9 +78,60 @@ namespace SnippetsExtension
 
         void App_OnInput(object sender, InputEventArgs e)
         {
-            if (app.SelectionLength > 0 || e.SpecKey == SpecKey.Escape)
+            if (e.SpecKey == SpecKey.Escape)
             {
                 middle = false;
+                return;
+            }
+
+            // Selection snippets
+            if (app.SelectionLength > 0)
+            {
+                middle = false;
+
+                if (e.Key != '\t')
+                    return;
+
+                var selected = app.Text.Substring(app.SelectionStart, app.SelectionLength);
+                var caret = app.SelectionStart;
+                var length = app.SelectionLength;
+
+                foreach (var snippet in snippets)
+                {
+                    if (!snippet.SelectTrigger)
+                        continue;
+
+                    if (snippet.UsesRegex)
+                    {
+                        var match = Regex.Match(selected, snippet.Template);
+                        if (!(match.Success && match.Length == selected.Length))
+                            continue;
+                    }
+                    else
+                    {
+                        if (snippet.Template != selected)
+                            continue;
+                    }
+
+                    var value = snippet.Value;
+
+                    if (snippet.ContainsPythonCode)
+                    {
+                        scope.SetVariable("word", selected);
+                        engine.Execute(snippet.PythonCode, scope);
+                        value = value.Insert(snippet.PythonPosition, scope.GetVariable("value"));
+                    }
+
+                    var index = Snippet.Index(value, 0);
+                    value = Snippet.ClearValue(value);
+
+                    app.Text = app.Text.Remove(caret, length).Insert(caret, value);
+                    app.SelectionStart = caret + index;
+                    app.SelectionLength = 0;
+                    e.Handled = true;
+                    return;
+                }
+
                 return;
             }
 
@@ -210,6 +261,9 @@ namespace SnippetsExtension
 
                 foreach (var snippet in snippets)
                 {
+                    if (snippet.SelectTrigger)
+                        continue;
+
                     if (snippet.UsesRegex)
                     {
                         var match = Regex.Match(head, snippet.Template + @"\Z", RegexOptions.Multiline | RegexOptions.RightToLeft);
@@ -393,6 +447,10 @@ namespace SnippetsExtension
             var part2 = word.Length > pos ? word.Substring(pos) : "";
 
             foreach (var snippet in snippets)
+            {
+                if (snippet.SelectTrigger)
+                    continue;
+
                 if (Snippet.Index(snippet.Value, 1) == -1 && !snippet.BeginOnly)
                     if (snippet.UsesRegex)
                     {
@@ -432,6 +490,7 @@ namespace SnippetsExtension
                         delta = Snippet.Index(middleValue, 0) - snippet.Template.Length;
                         return part1.Substring(0, part1.Length - snippet.Template.Length) + value + part2;
                     }
+            }
 
             delta = 0;
             return word;

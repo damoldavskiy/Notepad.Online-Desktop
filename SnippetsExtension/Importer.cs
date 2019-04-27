@@ -139,10 +139,14 @@ namespace SnippetsExtension
 
             var snippet = new Snippet
             {
-                Template = template + (headers.Contains("A") ? "" : "\t"),
+                Template = template,
                 BeginOnly = headers.Contains("B"),
-                UsesRegex = headers.Contains("R")
+                UsesRegex = headers.Contains("R"),
+                SelectTrigger = headers.Contains("S")
             };
+
+            if (!headers.Contains("A") && !headers.Contains("S"))
+                snippet.Template += "\t";
 
             // Python
             var python = false;
