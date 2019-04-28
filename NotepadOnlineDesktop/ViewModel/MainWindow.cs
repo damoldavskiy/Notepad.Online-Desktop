@@ -379,7 +379,16 @@ namespace NotepadOnlineDesktop.ViewModel
                 if (args.UpDirection)
                     options |= RegexOptions.RightToLeft;
 
-                var match = Regex.Match(block, word, options);
+                Match match = null;
+                try
+                {
+                    match = Regex.Match(block, word, options);
+                }
+                catch (ArgumentException)
+                {
+                    MessageBox.Show(Properties.Resources.IllegalArgument, Properties.Resources.Error, MessageBoxButton.OK);
+                    return;
+                }
 
                 if (!match.Success)
                 {
@@ -408,7 +417,16 @@ namespace NotepadOnlineDesktop.ViewModel
             {
                 var comp = args.IgnoreCase ? RegexOptions.IgnoreCase : RegexOptions.None;
 
-                text.Text = Regex.Replace(text.Text, args.Regex ? args.OldWord : Regex.Escape(args.OldWord), args.NewWord, comp);
+                try
+                {
+                    text.Text = Regex.Replace(text.Text, args.Regex ? args.OldWord : Regex.Escape(args.OldWord), args.NewWord, comp);
+                }
+                catch (ArgumentException)
+                {
+                    MessageBox.Show(Properties.Resources.IllegalArgument, Properties.Resources.Error, MessageBoxButton.OK);
+                    return;
+                }
+
                 text.Focus();
             };
             replaceWindow.Show();

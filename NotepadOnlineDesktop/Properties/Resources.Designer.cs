@@ -385,6 +385,15 @@ namespace NotepadOnlineDesktop.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Illegal argument.
+        /// </summary>
+        public static string IllegalArgument {
+            get {
+                return ResourceManager.GetString("IllegalArgument", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Notepad.Online Desktop
         ///Version: 1.0
         ///
