@@ -387,6 +387,7 @@ namespace NotepadOnlineDesktop.ViewModel
                 catch (ArgumentException)
                 {
                     MessageBox.Show(Properties.Resources.IllegalArgument, Properties.Resources.Error, MessageBoxButton.OK);
+                    text.Focus();
                     return;
                 }
 
@@ -424,7 +425,6 @@ namespace NotepadOnlineDesktop.ViewModel
                 catch (ArgumentException)
                 {
                     MessageBox.Show(Properties.Resources.IllegalArgument, Properties.Resources.Error, MessageBoxButton.OK);
-                    return;
                 }
 
                 text.Focus();
