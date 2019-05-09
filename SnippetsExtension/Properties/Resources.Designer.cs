@@ -70,6 +70,15 @@ namespace SnippetsExtension.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occured while loading brackets file.
+        /// </summary>
+        public static string BracketsLoadError {
+            get {
+                return ResourceManager.GetString("BracketsLoadError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Brackets file not found. Do you want to create one?.
         /// </summary>
         public static string BracketsNotFound {
@@ -174,6 +183,15 @@ namespace SnippetsExtension.Properties {
         public static string SnippetsFile {
             get {
                 return ResourceManager.GetString("SnippetsFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на An error occured while loading snippets file.
+        /// </summary>
+        public static string SnippetsLoadError {
+            get {
+                return ResourceManager.GetString("SnippetsLoadError", resourceCulture);
             }
         }
         

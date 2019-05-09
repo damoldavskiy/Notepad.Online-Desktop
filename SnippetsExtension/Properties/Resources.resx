@@ -120,6 +120,9 @@
   <data name="BracketsFile" xml:space="preserve">
     <value>Brackets file</value>
   </data>
+  <data name="BracketsLoadError" xml:space="preserve">
+    <value>An error occured while loading brackets file</value>
+  </data>
   <data name="BracketsNotFound" xml:space="preserve">
     <value>Brackets file not found. Do you want to create one?</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="SnippetsFile" xml:space="preserve">
     <value>Snippets file</value>
+  </data>
+  <data name="SnippetsLoadError" xml:space="preserve">
+    <value>An error occured while loading snippets file</value>
   </data>
   <data name="SnippetsNotFound" xml:space="preserve">
     <value>Snippets file not found. Do you want to create one?</value>

@@ -120,6 +120,9 @@
   <data name="BracketsFile" xml:space="preserve">
     <value>Файл скобок</value>
   </data>
+  <data name="BracketsLoadError" xml:space="preserve">
+    <value>Ошибка во время загрузки файла скобок</value>
+  </data>
   <data name="BracketsNotFound" xml:space="preserve">
     <value>Файл скобок не найден. Создать его?</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="SnippetsFile" xml:space="preserve">
     <value>Файл сниппетов</value>
+  </data>
+  <data name="SnippetsLoadError" xml:space="preserve">
+    <value>Ошибка во время загрузки файла сниппетов</value>
   </data>
   <data name="SnippetsNotFound" xml:space="preserve">
     <value>Файл сниппетов не найден. Создать его?</value>

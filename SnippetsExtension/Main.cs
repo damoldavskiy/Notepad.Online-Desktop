@@ -57,8 +57,26 @@ namespace SnippetsExtension
             properties = new MenuItem() { Header = Properties.Resources.Properties };
             properties.Click += Properties_Click;
 
-            snippets = Importer.LoadSnippets(configPath + "\\Config\\Snippets.ini");
-            brackets = Importer.LoadBrackets(configPath + "\\Config\\Brackets.ini");
+            try
+            {
+                snippets = Importer.LoadSnippets(configPath + "\\Config\\Snippets.ini");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(Properties.Resources.SnippetsLoadError + ". " + e.Message, Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                snippets = new Snippet[0];
+            }
+            
+            try
+            {
+                brackets = Importer.LoadBrackets(configPath + "\\Config\\Brackets.ini");
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(Properties.Resources.BracketsLoadError + ". " + e.Message, Properties.Resources.Error, MessageBoxButton.OK, MessageBoxImage.Error);
+                brackets = new Bracket[0];
+            }
+
             engine = Python.CreateEngine();
             scope = engine.CreateScope();
         }
