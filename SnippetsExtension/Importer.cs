@@ -27,7 +27,7 @@ namespace SnippetsExtension
                         continue;
 
                     if (line.Length != 2)
-                        throw new Exception(); // Ожидалось 2 символа
+                        throw new Exception(Properties.Resources.ExpectedTwo); // Ожидалось 2 символа
 
                     brackets.Add(new Bracket { Start = line[0], End = line[1] });
                 }
@@ -59,7 +59,7 @@ namespace SnippetsExtension
                         {
                             line = line.Remove(0, _snippet.Length).Trim();
                             if (line[0] != '\'')
-                                throw new Exception(); // После snippet нету кавычки
+                                throw new Exception(Properties.Resources.ExpectedPattern); // После snippet нету кавычки
                             line = line.Substring(1);
 
                             int pos = -1;
@@ -71,7 +71,7 @@ namespace SnippetsExtension
                                 }
 
                             if (pos == -1)
-                                throw new Exception(); // Нету символа окончания шаблона
+                                throw new Exception(Properties.Resources.ExpectedEnd); // Нету символа окончания шаблона
 
                             template = line.Substring(0, pos);
                             headers = line.Substring(pos + 1).Trim();
@@ -82,7 +82,7 @@ namespace SnippetsExtension
                         else if (line.StartsWith("#") || string.IsNullOrEmpty(line))
                             continue;
                         else
-                            throw new Exception(); // Ожидалось слово snippet
+                            throw new Exception(Properties.Resources.ExpectedSnippet); // Ожидалось слово snippet
 
                     if (state == ImporterState.ReadingValue)
                     {
@@ -163,7 +163,7 @@ namespace SnippetsExtension
                 if (value[i] == '`' && !python)
                 {
                     if (snippet.ContainsPythonCode)
-                        throw new Exception(); // Более одного блока Python
+                        throw new Exception(Properties.Resources.TooMuchPython); // Более одного блока Python
                     snippet.ContainsPythonCode = true;
                     snippet.PythonPosition = start = i;
                     python = true;

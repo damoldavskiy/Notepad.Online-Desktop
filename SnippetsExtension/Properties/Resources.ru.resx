@@ -141,6 +141,18 @@
   <data name="Error" xml:space="preserve">
     <value>Ошибка</value>
   </data>
+  <data name="ExpectedEnd" xml:space="preserve">
+    <value>В конце заголовочной строки ожидался апостроф.</value>
+  </data>
+  <data name="ExpectedPattern" xml:space="preserve">
+    <value>После ключевого слова "snippet" ожидался апостроф.</value>
+  </data>
+  <data name="ExpectedSnippet" xml:space="preserve">
+    <value>Ожидалось ключевое слово "snippet".</value>
+  </data>
+  <data name="ExpectedTwo" xml:space="preserve">
+    <value>Предполагалось два символа (левая и правая скобка).</value>
+  </data>
   <data name="Info" xml:space="preserve">
     <value>Сниппеты позволяют пользователю использовать быстрозаменяемые строки и другие инструменты среды разработки</value>
   </data>
@@ -164,5 +176,8 @@
   </data>
   <data name="SnippetsNotFound" xml:space="preserve">
     <value>Файл сниппетов не найден. Создать его?</value>
+  </data>
+  <data name="TooMuchPython" xml:space="preserve">
+    <value>Только один блок кода на Python разрешен.</value>
   </data>
 </root>

@@ -133,6 +133,42 @@ namespace SnippetsExtension.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Apostrophe expecred on the end of header line..
+        /// </summary>
+        public static string ExpectedEnd {
+            get {
+                return ResourceManager.GetString("ExpectedEnd", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Apostrophe expected after key word &quot;snippet&quot;..
+        /// </summary>
+        public static string ExpectedPattern {
+            get {
+                return ResourceManager.GetString("ExpectedPattern", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Key word &quot;snippet&quot; expected..
+        /// </summary>
+        public static string ExpectedSnippet {
+            get {
+                return ResourceManager.GetString("ExpectedSnippet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Two symbols for line expected (left and right bracket)..
+        /// </summary>
+        public static string ExpectedTwo {
+            get {
+                return ResourceManager.GetString("ExpectedTwo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Snippets allows user to use fast replace strings and other IDE tools.
         /// </summary>
         public static string Info {
@@ -201,6 +237,15 @@ namespace SnippetsExtension.Properties {
         public static string SnippetsNotFound {
             get {
                 return ResourceManager.GetString("SnippetsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Only one Python code block allowed..
+        /// </summary>
+        public static string TooMuchPython {
+            get {
+                return ResourceManager.GetString("TooMuchPython", resourceCulture);
             }
         }
     }

@@ -141,6 +141,18 @@
   <data name="Error" xml:space="preserve">
     <value>Error</value>
   </data>
+  <data name="ExpectedEnd" xml:space="preserve">
+    <value>Apostrophe expecred on the end of header line.</value>
+  </data>
+  <data name="ExpectedPattern" xml:space="preserve">
+    <value>Apostrophe expected after key word "snippet".</value>
+  </data>
+  <data name="ExpectedSnippet" xml:space="preserve">
+    <value>Key word "snippet" expected.</value>
+  </data>
+  <data name="ExpectedTwo" xml:space="preserve">
+    <value>Two symbols for line expected (left and right bracket).</value>
+  </data>
   <data name="Info" xml:space="preserve">
     <value>Snippets allows user to use fast replace strings and other IDE tools</value>
   </data>
@@ -164,5 +176,8 @@
   </data>
   <data name="SnippetsNotFound" xml:space="preserve">
     <value>Snippets file not found. Do you want to create one?</value>
+  </data>
+  <data name="TooMuchPython" xml:space="preserve">
+    <value>Only one Python code block allowed.</value>
   </data>
 </root>
